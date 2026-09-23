@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>予約表</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;background:#f5f5f7;color:#111}
+header{position:sticky;top:0;background:white;padding:12px;z-index:5;border-bottom:1px solid #ddd}
+h1{font-size:20px;margin:0 0 8px}.bar{display:flex;gap:8px;align-items:center}.bar input{font-size:16px;padding:7px;border:1px solid #ccc;border-radius:8px}.bar button{padding:8px 12px;border:0;border-radius:8px;background:#111;color:white}
+.wrap{padding:10px}.grid{display:grid;grid-template-columns:58px 1fr 1fr;background:white;border-radius:12px;overflow:hidden;border:1px solid #ddd}
+.cell{min-height:48px;border-right:1px solid #ddd;border-bottom:1px solid #ddd;padding:4px}
+.head{position:sticky;top:74px;background:#222;color:white;text-align:center;font-weight:700;z-index:3}
+.time{text-align:center;font-size:12px;color:#555;display:flex;align-items:center;justify-content:center}
+.slot{width:100%;height:100%;min-height:40px;border:0;border-radius:7px;background:#e8f7e8;color:#197329;font-weight:600;font-size:12px}
+.slot.booked{background:#ffd9d9;color:#a40000}.slot.buffer{background:#fff1cc;color:#8a5a00}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:20;align-items:flex-end;justify-content:center}
+.box{background:white;width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:18px}
+.box h2{margin:0 0 10px;font-size:19px}.courses{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.courses button{padding:12px 2px;border:1px solid #ccc;background:white;border-radius:8px;font-weight:700}.courses button.sel{background:#111;color:white}
+input.name{width:100%;padding:12px;margin:12px 0;font-size:16px;border:1px solid #ccc;border-radius:8px}
+.actions{display:flex;gap:8px}.actions button{flex:1;padding:12px;border:0;border-radius:9px;font-weight:700}.ok{background:#111;color:white}.cancel{background:#eee}.del{background:#f44;color:white;margin-top:8px;width:100%;padding:11px;border:0;border-radius:9px}
+.small{font-size:12px;color:#666;margin-top:8px}
+</style>
+</head>
+<body>
+<header><h1>予約表</h1><div class="bar"><input id="date" type="date"><button onclick="today()">今日</button></div></header>
+<div class="wrap"><div id="grid" class="grid"></div></div>
+
+<div id="modal" class="modal">
+ <div class="box">
+  <h2 id="mtitle">予約</h2>
+  <div class="small" id="mwhen"></div>
+  <div class="courses">
+   <button data-min="40">40分</button><button data-min="60">60分</button><button data-min="90">90分</button><button data-min="100">100分</button><button data-min="120">120分</button>
+  </div>
+  <input id="name" class="name" placeholder="お客様名（空欄でもOK）">
+  <div class="actions"><button class="cancel" onclick="closeModal()">キャンセル</button><button class="ok" onclick="save()">予約する</button></div>
+  <button id="del" class="del" style="display:none" onclick="removeBooking()">この予約を削除</button>
+ </div>
+</div>
+
+<script>
+const girls=["ことねさん","ナヨンさん"], start=13*60, end=24*60, step=10;
+let data=JSON.parse(localStorage.getItem("shop_reservations")||"{}"), current=null, selected=40;
+const dateEl=document.getElementById("date"); dateEl.value=new Date().toISOString().slice(0,10);
+dateEl.onchange=render;
+document.querySelectorAll(".courses button").forEach(b=>b.onclick=()=>{selected=+b.dataset.min;document.querySelectorAll(".courses button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel")});
+function key(){return dateEl.value}
+function store(){localStorage.setItem("shop_reservations",JSON.stringify(data))}
+function fmt(m){return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
+function bookings(){return data[key()]||[]}
+function overlap(g,s,e,ignore=-1){return bookings().some((b,i)=>i!==ignore&&b.g===g&&s < b.end+10 && e+10 > b.start)}
+function render(){
+ const grid=document.getElementById("grid"); grid.innerHTML="";
+ let h=document.createElement("div");h.className="cell head";h.textContent="時間";grid.append(h);
+ girls.forEach(g=>{let x=document.createElement("div");x.className="cell head";x.textContent=g;grid.append(x)});
+ for(let t=start;t<end;t+=step){
+  let tm=document.createElement("div");tm.className="cell time";tm.textContent=fmt(t);grid.append(tm);
+  girls.forEach(g=>{
+   let c=document.createElement("div");c.className="cell";
+   let b=bookings().find(x=>x.g===g&&t>=x.start&&t<x.end+10);
+   let btn=document.createElement("button");btn.className="slot";
+   if(b){btn.classList.add(t>=b.end?"buffer":"booked");btn.textContent=t>=b.end?"10分休憩":(t===b.start?`${b.name||"予約"} ${b.min}分`:"予約中");btn.onclick=()=>openModal(g,t,b)}
+   else{btn.textContent="空き";btn.onclick=()=>openModal(g,t,null)}
+   c.append(btn);grid.append(c);
+  });
+ }
+}
+function openModal(g,t,b){
+ current={g,t,b}; selected=b?b.min:40;
+ document.getElementById("mtitle").textContent=b?"予約を編集":"新規予約";
+ document.getElementById("mwhen").textContent=`${g}　${fmt(t)}〜`;
+ document.getElementById("name").value=b?b.name:"";
+ document.querySelectorAll(".courses button").forEach(x=>x.classList.toggle("sel",+x.dataset.min===selected));
+ document.getElementById("del").style.display=b?"block":"none";
+ document.getElementById("modal").style.display="flex";
+}
+function closeModal(){document.getElementById("modal").style.display="none";current=null}
+function save(){
+ let {g,t,b}=current, idx=b?bookings().indexOf(b):-1, e=t+selected;
+ if(e>24*60){alert("24:00を超える予約は入れられません");return}
+ if(overlap(g,t,e,idx)){alert("この時間は他の予約（10分休憩含む）と重なります");return}
+ let arr=bookings();
+ if(idx>=0)arr[idx]={...arr[idx],start:t,end:e,min:selected,name:document.getElementById("name").value.trim(),g};
+ else arr.push({g,start:t,end:e,min:selected,name:document.getElementById("name").value.trim()});
+ data[key()]=arr;store();closeModal();render();
+}
+function removeBooking(){
+ let arr=bookings(),idx=arr.indexOf(current.b);if(idx>=0)arr.splice(idx,1);data[key()]=arr;store();closeModal();render();
+}
+function today(){dateEl.value=new Date().toISOString().slice(0,10);render()}
+render();
+</script>
+</body>
+</html>
