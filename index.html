@@ -4,11 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>予約表</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;background:#fff;color:#111}
-button,input,select{font:inherit}
-button{cursor:pointer}
+
+body{
+ margin:0;
+ font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;
+ background:#fff;
+ color:#111
+}
+
+button,input,select{
+ font:inherit
+}
+
+button{
+ cursor:pointer
+}
 
 .topbar{
  position:sticky;
@@ -26,7 +39,8 @@ button{cursor:pointer}
  align-items:center
 }
 
-.nav button,.datebox{
+.nav button,
+.datebox{
  height:52px;
  border-radius:12px;
  border:1px solid #ccc
@@ -38,7 +52,9 @@ button{cursor:pointer}
  font-size:28px
 }
 
-.nav .action{font-size:16px}
+.nav .action{
+ font-size:16px
+}
 
 .datebox{
  display:flex;
@@ -64,7 +80,8 @@ button{cursor:pointer}
  min-width:100%
 }
 
-.schedule th,.schedule td{
+.schedule th,
+.schedule td{
  border:1px solid #ddd
 }
 
@@ -102,7 +119,9 @@ button{cursor:pointer}
  padding:7px
 }
 
-.res-card,.add-card,.unavailable{
+.res-card,
+.add-card,
+.unavailable{
  width:100%;
  height:100%;
  border-radius:11px
@@ -116,7 +135,9 @@ button{cursor:pointer}
  padding:10px
 }
 
-.res-card strong,.res-card span,.res-card small{
+.res-card strong,
+.res-card span,
+.res-card small{
  display:block
 }
 
@@ -187,7 +208,8 @@ button{cursor:pointer}
  color:#555
 }
 
-.field input,.field select{
+.field input,
+.field select{
  width:100%;
  height:54px;
  border:1px solid #ccc;
@@ -288,6 +310,7 @@ button{cursor:pointer}
 }
 
 @media(max-width:700px){
+
  .nav{
   grid-template-columns:48px 1fr 48px 78px 78px
  }
@@ -315,61 +338,126 @@ button{cursor:pointer}
 
 <div class="topbar">
  <div class="nav">
+
   <button id="prevDay">‹</button>
+
   <div id="dateBox" class="datebox"></div>
+
   <button id="nextDay">›</button>
-  <button id="summaryBtn" class="action">集計</button>
-  <button id="settingsBtn" class="action">設定</button>
+
+  <button id="summaryBtn" class="action">
+   集計
+  </button>
+
+  <button id="settingsBtn" class="action">
+   設定
+  </button>
+
  </div>
 </div>
 
+
 <div class="wrap">
+
  <div class="table-wrap">
+
   <table class="schedule">
+
    <thead>
     <tr id="headRow"></tr>
    </thead>
+
    <tbody id="scheduleBody"></tbody>
+
   </table>
+
  </div>
+
 </div>
 
 
-<!-- 予約画面 -->
+<!-- =========================
+     新規予約・編集
+========================= -->
 
 <div id="reservationBack" class="modal-back">
 
  <div class="modal">
 
-  <h2 id="reservationTitle">新しい予約</h2>
+  <h2 id="reservationTitle">
+   新しい予約
+  </h2>
 
   <div id="reservationError" class="error"></div>
 
+
   <div class="field">
+
    <label>お客様</label>
-   <input id="customerInput" placeholder="お客様名">
+
+   <input
+    id="customerInput"
+    placeholder="お客様名"
+   >
+
   </div>
 
+
   <div class="field">
+
    <label>女の子</label>
+
    <select id="girlSelect"></select>
+
   </div>
 
-  <div class="field">
-   <label>開始時間（1分単位）</label>
-   <input id="timeInput" type="time" step="60">
-  </div>
 
   <div class="field">
+
+   <label>
+    開始時間（1分単位）
+   </label>
+
+   <input
+    id="timeInput"
+    type="time"
+    step="60"
+   >
+
+  </div>
+
+
+  <div class="field">
+
    <label>コース</label>
+
    <select id="courseSelect"></select>
+
   </div>
 
-  <div id="reservationHint" class="info"></div>
+
+  <div
+   id="reservationHint"
+   class="info"
+  ></div>
+
 
   <div class="modal-actions">
-   <button class="btn" id="cancelReservation">キャンセル</button>
-   <button class="btn black" id="saveReservation">保存</button>
+
+   <button
+    class="btn"
+    id="cancelReservation"
+   >
+    キャンセル
+   </button>
+
+   <button
+    class="btn black"
+    id="saveReservation"
+   >
+    保存
+   </button>
+
   </div>
 
  </div>
@@ -377,7 +465,9 @@ button{cursor:pointer}
 </div>
 
 
-<!-- 設定 -->
+<!-- =========================
+     設定
+========================= -->
 
 <div id="settingsBack" class="modal-back">
 
@@ -385,13 +475,20 @@ button{cursor:pointer}
 
   <h2>設定</h2>
 
+
   <div class="field">
 
    <label>女の子</label>
 
-   <div id="girlsSettings" class="settings-list"></div>
+   <div
+    id="girlsSettings"
+    class="settings-list"
+   ></div>
 
-   <button class="btn add-line" id="addGirl">
+   <button
+    class="btn add-line"
+    id="addGirl"
+   >
     ＋ 女の子を追加
    </button>
 
@@ -400,11 +497,19 @@ button{cursor:pointer}
 
   <div class="field">
 
-   <label>コース（コース名・分数・料金）</label>
+   <label>
+    コース（コース名・分数・料金）
+   </label>
 
-   <div id="coursesSettings" class="settings-list"></div>
+   <div
+    id="coursesSettings"
+    class="settings-list"
+   ></div>
 
-   <button class="btn add-line" id="addCourse">
+   <button
+    class="btn add-line"
+    id="addCourse"
+   >
     ＋ コースを追加
    </button>
 
@@ -412,8 +517,21 @@ button{cursor:pointer}
 
 
   <div class="modal-actions">
-   <button class="btn" id="cancelSettings">キャンセル</button>
-   <button class="btn black" id="saveSettings">設定を保存</button>
+
+   <button
+    class="btn"
+    id="cancelSettings"
+   >
+    キャンセル
+   </button>
+
+   <button
+    class="btn black"
+    id="saveSettings"
+   >
+    設定を保存
+   </button>
+
   </div>
 
  </div>
@@ -421,7 +539,9 @@ button{cursor:pointer}
 </div>
 
 
-<!-- 集計 -->
+<!-- =========================
+     集計
+========================= -->
 
 <div id="summaryBack" class="modal-back">
 
@@ -432,9 +552,14 @@ button{cursor:pointer}
   <div id="summaryContent"></div>
 
   <div class="modal-actions">
-   <button class="btn black" id="closeSummary">
+
+   <button
+    class="btn black"
+    id="closeSummary"
+   >
     閉じる
    </button>
+
   </div>
 
  </div>
@@ -447,19 +572,33 @@ button{cursor:pointer}
 "use strict";
 
 
-/* =========================
+/* ==================================================
    基本設定
-========================= */
+================================================== */
+
+
+/*
+  営業開始
+  10:00
+*/
 
 const START_TIME = 10 * 60;
+
+
+/*
+  営業終了
+  24:00
+*/
 
 const END_TIME = 24 * 60;
 
 
 /*
- ここが重要！
+  ★★★重要★★★
 
- 予約終了後は10分空ける
+  予約終了後に空ける時間
+
+  10分
 */
 
 const GAP_MINUTES = 10;
@@ -472,37 +611,50 @@ const DEFAULT_GIRLS = [
 
 
 const DEFAULT_COURSES = [
+
  {
   name:"40分",
   minutes:40,
   price:10000
  },
+
  {
   name:"60分",
   minutes:60,
   price:14000
  },
+
  {
   name:"90分",
   minutes:90,
   price:20000
  },
+
  {
   name:"100分",
   minutes:100,
   price:22000
  },
+
  {
   name:"120分",
   minutes:120,
   price:26000
  }
+
 ];
 
 
-const SETTINGS_KEY = "yoyaku_settings_final_v8";
+/*
+  新しい保存場所を使用
+*/
 
-const RES_PREFIX = "yoyaku_reservations_final_v8_";
+const SETTINGS_KEY =
+ "yoyaku_settings_final_v10";
+
+
+const RES_PREFIX =
+ "yoyaku_reservations_final_v10_";
 
 
 let currentDate = new Date();
@@ -514,48 +666,67 @@ let settings = loadSettings();
 let editingId = null;
 
 
-/* =========================
-   共通関数
-========================= */
+/* ==================================================
+   共通
+================================================== */
 
 function pad(n){
+
  return String(n).padStart(2,"0");
+
 }
 
 
 function dateKey(d){
+
  return d.getFullYear()
   + "-"
   + pad(d.getMonth()+1)
   + "-"
   + pad(d.getDate());
+
 }
 
 
 function formatDate(d){
+
  return d.getFullYear()
   + "/"
   + pad(d.getMonth()+1)
   + "/"
   + pad(d.getDate());
+
 }
 
 
 function minutesToTime(min){
- return pad(Math.floor(min/60))
-  + ":"
-  + pad(min%60);
+
+ return pad(
+  Math.floor(min / 60)
+ )
+ + ":"
+ + pad(min % 60);
+
 }
 
 
 function timeToMinutes(value){
 
- const m = String(value || "")
-  .match(/^(\d{1,2}):(\d{2})$/);
+ const m =
+  String(value || "")
+   .match(/^(\d{1,2}):(\d{2})$/);
 
- return m
-  ? Number(m[1]) * 60 + Number(m[2])
-  : NaN;
+ if(!m){
+
+  return NaN;
+
+ }
+
+ return (
+  Number(m[1]) * 60
+  + Number(m[2])
+ );
+
 }
 
 
@@ -567,18 +738,22 @@ function escapeHtml(value){
   .replace(/>/g,"&gt;")
   .replace(/"/g,"&quot;")
   .replace(/'/g,"&#039;");
+
 }
 
 
 function yen(value){
- return "¥" + Number(value || 0)
-  .toLocaleString("ja-JP");
+
+ return "¥"
+  + Number(value || 0)
+   .toLocaleString("ja-JP");
+
 }
 
 
-/* =========================
+/* ==================================================
    設定
-========================= */
+================================================== */
 
 function normalizeSettings(data){
 
@@ -604,9 +779,18 @@ function normalizeSettings(data){
  const cleanCourses =
   courses
    .map(c=>({
-    name:String(c.name ?? "").trim(),
-    minutes:Number(c.minutes),
-    price:Number(c.price)
+
+    name:
+     String(
+      c.name ?? ""
+     ).trim(),
+
+    minutes:
+     Number(c.minutes),
+
+    price:
+     Number(c.price)
+
    }))
    .filter(c =>
     c.name &&
@@ -628,7 +812,10 @@ function normalizeSettings(data){
   courses:
    cleanCourses.length
     ? cleanCourses
-    : DEFAULT_COURSES.map(c=>({...c}))
+    : DEFAULT_COURSES.map(
+       c=>({...c})
+      )
+
  };
 
 }
@@ -639,11 +826,17 @@ function loadSettings(){
  try{
 
   const raw =
-   localStorage.getItem(SETTINGS_KEY);
+   localStorage.getItem(
+    SETTINGS_KEY
+   );
+
 
   return raw
-   ? normalizeSettings(JSON.parse(raw))
+   ? normalizeSettings(
+      JSON.parse(raw)
+     )
    : normalizeSettings({});
+
 
  }catch(e){
 
@@ -664,9 +857,9 @@ function saveSettingsStorage(){
 }
 
 
-/* =========================
+/* ==================================================
    予約データ
-========================= */
+================================================== */
 
 function loadReservations(){
 
@@ -674,17 +867,25 @@ function loadReservations(){
 
   const raw =
    localStorage.getItem(
-    RES_PREFIX + dateKey(currentDate)
+    RES_PREFIX
+    + dateKey(currentDate)
    );
+
 
   reservations =
    raw
     ? JSON.parse(raw)
     : [];
 
-  if(!Array.isArray(reservations)){
+
+  if(
+   !Array.isArray(reservations)
+  ){
+
    reservations=[];
+
   }
+
 
  }catch(e){
 
@@ -698,7 +899,8 @@ function loadReservations(){
 function saveReservations(){
 
  localStorage.setItem(
-  RES_PREFIX + dateKey(currentDate),
+  RES_PREFIX
+  + dateKey(currentDate),
   JSON.stringify(reservations)
  );
 
@@ -708,7 +910,10 @@ function saveReservations(){
 function getCourse(name){
 
  return settings.courses.find(
-  c => String(c.name) === String(name)
+  c =>
+   String(c.name)
+   ===
+   String(name)
  ) || null;
 
 }
@@ -716,53 +921,64 @@ function getCourse(name){
 
 function getDuration(r){
 
- const c = getCourse(r.course);
+ const c =
+  getCourse(r.course);
 
- return c
-  ? Number(c.minutes)
-  : Number(r.minutes) || 0;
+
+ if(c){
+
+  return Number(c.minutes);
+
+ }
+
+
+ return Number(r.minutes) || 0;
 
 }
 
 
 function getEnd(r){
 
- return timeToMinutes(r.time)
-  + getDuration(r);
+ return (
+  timeToMinutes(r.time)
+  +
+  getDuration(r)
+ );
 
 }
 
 
-/* =========================
-   予約可能判定
-========================= */
+/* ==================================================
+   ★★★ 予約可能判定 ★★★
+================================================== */
 
 /*
- 重要
+ 例：
 
- 既存予約
  10:00〜10:40
-
- 10:40 → NG
- 10:41 → NG
- 10:42 → NG
- 10:43 → NG
- 10:44 → NG
- 10:45 → NG
- 10:46 → NG
- 10:47 → NG
- 10:48 → NG
- 10:49 → NG
-
- 10:50 → OK
+ ↓
+ 10:40 NG
+ 10:41 NG
+ 10:42 NG
+ 10:43 NG
+ 10:44 NG
+ 10:45 NG
+ 10:46 NG
+ 10:47 NG
+ 10:48 NG
+ 10:49 NG
+ 10:50 OK
 
 
  つまり
 
- 予約終了時間 + 10分
+ 既存予約終了
+ ＋
+ 10分
 
  から予約可能。
 */
+
 
 function isAvailable(
  girl,
@@ -771,47 +987,90 @@ function isAvailable(
  excludeId=null
 ){
 
- const newStart = Number(start);
+ const newStart =
+  Number(start);
+
 
  const newEnd =
-  newStart + Number(duration);
+  newStart
+  + Number(duration);
 
+
+ /*
+  時間が数字として正しいか
+ */
 
  if(
-  !Number.isFinite(newStart) ||
+  !Number.isFinite(newStart)
+  ||
   !Number.isFinite(newEnd)
  ){
+
   return false;
+
  }
 
+
+ /*
+  営業時間外チェック
+ */
 
  if(
-  newStart < START_TIME ||
+  newStart < START_TIME
+  ||
   newEnd > END_TIME
  ){
+
   return false;
+
  }
 
 
- for(const old of reservations){
+ /*
+  既存予約を確認
+ */
+
+ for(
+  const old
+  of reservations
+ ){
+
+  /*
+   女の子が違えばOK
+  */
 
   if(
-   String(old.girl) !== String(girl)
+   String(old.girl)
+   !==
+   String(girl)
   ){
+
    continue;
+
   }
 
 
+  /*
+   編集中の自分自身は除外
+  */
+
   if(
-   excludeId !== null &&
-   String(old.id) === String(excludeId)
+   excludeId !== null
+   &&
+   String(old.id)
+   ===
+   String(excludeId)
   ){
+
    continue;
+
   }
 
 
   const oldStart =
-   timeToMinutes(old.time);
+   timeToMinutes(
+    old.time
+   );
 
 
   const oldEnd =
@@ -819,82 +1078,137 @@ function isAvailable(
 
 
   /*
-   新しい予約が既存予約の後ろの場合
+   =====================================
+   新しい予約が既存予約の後ろ
+   =====================================
 
-   既存終了 + 10分より前はNG
+   例
+
+   既存
+   10:00〜10:40
+
+   10:40〜 → NG
+   10:49〜 → NG
+   10:50〜 → OK
   */
 
   if(
-   newStart >= oldStart &&
-   newStart < oldEnd + GAP_MINUTES
+   newStart >= oldStart
+   &&
+   newStart
+   <
+   oldEnd + GAP_MINUTES
   ){
+
    return false;
+
   }
 
 
   /*
-   新しい予約が既存予約の前の場合
+   =====================================
+   新しい予約が既存予約の前
+   =====================================
 
-   新しい予約終了 + 10分
-   が既存予約開始を超えたらNG
+   例
+
+   既存
+   11:00〜11:40
+
+   新しい予約
+   10:20〜11:00 → NG
+
+   10:10〜10:50 → NG
+
+   10:00〜10:40 → OK
   */
 
   if(
-   newStart < oldStart &&
-   newEnd + GAP_MINUTES > oldStart
+   newStart < oldStart
+   &&
+   newEnd + GAP_MINUTES
+   >
+   oldStart
   ){
+
    return false;
+
   }
 
 
   /*
-   通常の重複チェック
+   =====================================
+   通常の重複
+   =====================================
   */
 
   if(
-   newStart < oldEnd &&
+   newStart < oldEnd
+   &&
    newEnd > oldStart
   ){
+
    return false;
+
   }
 
  }
 
 
  return true;
+
 }
 
 
-/* =========================
+/* ==================================================
    表示
-========================= */
+================================================== */
 
-function coveringReservation(girl,t){
+function coveringReservation(
+ girl,
+ t
+){
 
- return reservations.find(r=>{
+ return reservations.find(
+  r=>{
 
-  if(
-   String(r.girl) !== String(girl)
-  ){
-   return false;
+   if(
+    String(r.girl)
+    !==
+    String(girl)
+   ){
+
+    return false;
+
+   }
+
+
+   const start =
+    timeToMinutes(
+     r.time
+    );
+
+
+   const end =
+    getEnd(r);
+
+
+   return (
+    t >= start
+    &&
+    t < end
+   );
+
   }
-
-
-  const start =
-   timeToMinutes(r.time);
-
-  const end =
-   getEnd(r);
-
-
-  return t >= start && t < end;
-
- }) || null;
+ ) || null;
 
 }
 
 
-function isGridAvailable(girl,t){
+function isGridAvailable(
+ girl,
+ t
+){
 
  return settings.courses.some(
   c =>
@@ -910,25 +1224,31 @@ function isGridAvailable(girl,t){
 
 function render(){
 
- document.getElementById("dateBox")
-  .textContent =
-   formatDate(currentDate);
+ document.getElementById(
+  "dateBox"
+ ).textContent =
+  formatDate(currentDate);
 
 
  loadReservations();
 
 
- document.getElementById("headRow")
-  .innerHTML =
-   '<th class="time-head">時間</th>' +
+ document.getElementById(
+  "headRow"
+ ).innerHTML =
 
-   settings.girls
-    .map(g =>
+  '<th class="time-head">時間</th>'
+
+  +
+
+  settings.girls
+   .map(
+    g =>
      '<th class="girl-head">'
      + escapeHtml(g)
      + '</th>'
-    )
-    .join("");
+   )
+   .join("");
 
 
  const body =
@@ -941,7 +1261,7 @@ function render(){
 
 
  /*
-  表示は10分刻み
+  ★ 表示は10分刻み
  */
 
  for(
@@ -951,11 +1271,15 @@ function render(){
  ){
 
   const tr =
-   document.createElement("tr");
+   document.createElement(
+    "tr"
+   );
 
 
   const timeTd =
-   document.createElement("td");
+   document.createElement(
+    "td"
+   );
 
 
   timeTd.className="time";
@@ -968,11 +1292,14 @@ function render(){
 
 
   for(
-   const girl of settings.girls
+   const girl
+   of settings.girls
   ){
 
    const td =
-    document.createElement("td");
+    document.createElement(
+     "td"
+    );
 
 
    td.className="slot";
@@ -985,10 +1312,16 @@ function render(){
     );
 
 
+   /*
+    予約あり
+   */
+
    if(r){
 
     const button =
-     document.createElement("button");
+     document.createElement(
+      "button"
+     );
 
 
     button.className =
@@ -1011,7 +1344,9 @@ function render(){
 
      "<span>"
      + escapeHtml(
-        r.customer || "お客様"
+        r.customer
+        ||
+        "お客様"
        )
      + " / "
      + escapeHtml(r.course)
@@ -1025,12 +1360,23 @@ function render(){
 
 
     button.onclick =
-     ()=>openEdit(r.id);
+     ()=>{
+      openEdit(r.id);
+     };
 
 
-    td.appendChild(button);
+    td.appendChild(
+     button
+    );
 
-   }else if(
+   }
+
+
+   /*
+    予約可能
+   */
+
+   else if(
     isGridAvailable(
      girl,
      t
@@ -1052,15 +1398,26 @@ function render(){
 
 
     button.onclick =
-     ()=>openNew(
-      girl,
-      t
-     );
+     ()=>{
+      openNew(
+       girl,
+       t
+      );
+     };
 
 
-    td.appendChild(button);
+    td.appendChild(
+     button
+    );
 
-   }else{
+   }
+
+
+   /*
+    予約不可
+   */
+
+   else{
 
     const div =
      document.createElement(
@@ -1076,7 +1433,9 @@ function render(){
      "予約不可";
 
 
-    td.appendChild(div);
+    td.appendChild(
+     div
+    );
 
    }
 
@@ -1093,26 +1452,27 @@ function render(){
 }
 
 
-/* =========================
+/* ==================================================
    予約画面
-========================= */
+================================================== */
 
 function fillGirlSelect(){
 
- const s =
+ const select =
   document.getElementById(
    "girlSelect"
   );
 
 
- s.innerHTML =
+ select.innerHTML =
   settings.girls
-   .map(g =>
-    '<option value="'
-    + escapeHtml(g)
-    + '">'
-    + escapeHtml(g)
-    + '</option>'
+   .map(
+    g =>
+     '<option value="'
+     + escapeHtml(g)
+     + '">'
+     + escapeHtml(g)
+     + '</option>'
    )
    .join("");
 
@@ -1121,24 +1481,25 @@ function fillGirlSelect(){
 
 function fillCourseSelect(){
 
- const s =
+ const select =
   document.getElementById(
    "courseSelect"
   );
 
 
- s.innerHTML =
+ select.innerHTML =
   settings.courses
-   .map(c =>
-    '<option value="'
-    + escapeHtml(c.name)
-    + '">'
-    + escapeHtml(c.name)
-    + "（"
-    + c.minutes
-    + "分 / "
-    + yen(c.price)
-    + "）</option>"
+   .map(
+    c =>
+     '<option value="'
+     + escapeHtml(c.name)
+     + '">'
+     + escapeHtml(c.name)
+     + "（"
+     + c.minutes
+     + "分 / "
+     + yen(c.price)
+     + "）</option>"
    )
    .join("");
 
@@ -1147,30 +1508,37 @@ function fillCourseSelect(){
 
 function clearError(){
 
- const e =
+ const error =
   document.getElementById(
    "reservationError"
   );
 
 
- e.classList.remove("show");
+ error.classList.remove(
+  "show"
+ );
 
- e.textContent="";
+
+ error.textContent="";
 
 }
 
 
-function showError(msg){
+function showError(message){
 
- const e =
+ const error =
   document.getElementById(
    "reservationError"
   );
 
 
- e.textContent=msg;
+ error.textContent =
+  message;
 
- e.classList.add("show");
+
+ error.classList.add(
+  "show"
+ );
 
 }
 
@@ -1203,7 +1571,11 @@ function updateHint(){
   );
 
 
- if(!course || !time){
+ if(
+  !course
+  ||
+  !time
+ ){
 
   hint.textContent="";
 
@@ -1217,7 +1589,9 @@ function updateHint(){
 
 
  const end =
-  start + course.minutes;
+  start
+  +
+  course.minutes;
 
 
  const ok =
@@ -1230,6 +1604,7 @@ function updateHint(){
 
 
  hint.textContent =
+
   time
   + "〜"
   + minutesToTime(end)
@@ -1237,16 +1612,22 @@ function updateHint(){
   + course.minutes
   + "分 ／ "
   + yen(course.price)
-  + (
-    ok
-     ? ""
-     : "　⚠ この時間は予約できません"
-   );
+
+  +
+
+  (
+   ok
+    ? ""
+    : "　⚠ この時間は予約できません"
+  );
 
 }
 
 
-function openNew(girl,time){
+function openNew(
+ girl,
+ time
+){
 
  editingId=null;
 
@@ -1283,7 +1664,9 @@ function openNew(girl,time){
 
  document.getElementById(
   "reservationBack"
- ).classList.add("show");
+ ).classList.add(
+  "show"
+ );
 
 
  updateHint();
@@ -1299,15 +1682,22 @@ function openEdit(id){
  const r =
   reservations.find(
    x =>
-    String(x.id) ===
+    String(x.id)
+    ===
     String(id)
   );
 
 
- if(!r)return;
+ if(!r){
+
+  return;
+
+ }
 
 
- editingId=r.id;
+ editingId =
+  r.id;
+
 
  clearError();
 
@@ -1349,7 +1739,9 @@ function openEdit(id){
 
  document.getElementById(
   "reservationBack"
- ).classList.add("show");
+ ).classList.add(
+  "show"
+ );
 
 
  updateHint();
@@ -1357,9 +1749,9 @@ function openEdit(id){
 }
 
 
-/* =========================
-   予約保存
-========================= */
+/* ==================================================
+   保存
+================================================== */
 
 function saveReservation(){
 
@@ -1370,7 +1762,8 @@ function saveReservation(){
   document.getElementById(
    "customerInput"
   ).value.trim()
-  || "お客様";
+  ||
+  "お客様";
 
 
  const girl =
@@ -1404,22 +1797,28 @@ function saveReservation(){
   );
 
   return;
+
  }
 
 
- if(!Number.isFinite(start)){
+ if(
+  !Number.isFinite(start)
+ ){
 
   showError(
    "開始時間を入力してください。"
   );
 
   return;
+
  }
 
 
  if(
-  start < START_TIME ||
-  start + course.minutes > END_TIME
+  start < START_TIME
+  ||
+  start + course.minutes
+  > END_TIME
  ){
 
   showError(
@@ -1427,11 +1826,12 @@ function saveReservation(){
   );
 
   return;
+
  }
 
 
  /*
- ここで10分ルールをチェック
+  ★★★ここで10分ルールを判定★★★
  */
 
  if(
@@ -1448,26 +1848,36 @@ function saveReservation(){
   );
 
   return;
+
  }
 
 
  const item = {
 
   id:
-   editingId ||
+   editingId
+   ||
    Date.now()
    + "_"
-   + Math.random()
-      .toString(36)
-      .slice(2),
+   +
+   Math.random()
+    .toString(36)
+    .slice(2),
 
-  customer,
+  customer:
 
-  girl,
+   customer,
 
-  time,
+  girl:
+
+   girl,
+
+  time:
+
+   time,
 
   course:
+
    course.name
 
  };
@@ -1478,20 +1888,25 @@ function saveReservation(){
   const index =
    reservations.findIndex(
     r =>
-     String(r.id) ===
+     String(r.id)
+     ===
      String(editingId)
    );
 
 
   if(index >= 0){
 
-   reservations[index]=item;
+   reservations[index] =
+    item;
 
   }
 
- }else{
+ }
+ else{
 
-  reservations.push(item);
+  reservations.push(
+   item
+  );
 
  }
 
@@ -1517,7 +1932,9 @@ function closeReservation(){
 
  document.getElementById(
   "reservationBack"
- ).classList.remove("show");
+ ).classList.remove(
+  "show"
+ );
 
 
  editingId=null;
@@ -1525,17 +1942,20 @@ function closeReservation(){
 }
 
 
-/* =========================
-   設定
-========================= */
+/* ==================================================
+   設定画面
+================================================== */
 
 function openSettings(){
 
  renderSettings();
 
+
  document.getElementById(
   "settingsBack"
- ).classList.add("show");
+ ).classList.add(
+  "show"
+ );
 
 }
 
@@ -1544,24 +1964,29 @@ function closeSettings(){
 
  document.getElementById(
   "settingsBack"
- ).classList.remove("show");
+ ).classList.remove(
+  "show"
+ );
 
 }
 
 
 function renderSettings(){
 
- const gb =
+ const girlsBox =
   document.getElementById(
    "girlsSettings"
   );
 
 
- gb.innerHTML="";
+ girlsBox.innerHTML="";
 
 
  settings.girls.forEach(
-  (girl,index)=>{
+  (
+   girl,
+   index
+  )=>{
 
    const row =
     document.createElement(
@@ -1588,57 +2013,68 @@ function renderSettings(){
     + '">削除</button>';
 
 
-   gb.appendChild(row);
+   girlsBox.appendChild(
+    row
+   );
 
   }
  );
 
 
- gb.querySelectorAll(
-  "[data-rmgirl]"
- ).forEach(button=>{
+ girlsBox
+  .querySelectorAll(
+   "[data-rmgirl]"
+  )
+  .forEach(
+   button=>{
 
-  button.onclick=()=>{
+    button.onclick=()=>{
 
-   if(
-    settings.girls.length <= 1
-   ){
+     if(
+      settings.girls.length
+      <=
+      1
+     ){
 
-    alert(
-     "女の子は最低1人必要です。"
-    );
+      alert(
+       "女の子は最低1人必要です。"
+      );
 
-    return;
+      return;
+
+     }
+
+
+     settings.girls.splice(
+      Number(
+       button.dataset.rmgirl
+      ),
+      1
+     );
+
+
+     renderSettings();
+
+    };
 
    }
+  );
 
 
-   settings.girls.splice(
-    Number(
-     button.dataset.rmgirl
-    ),
-    1
-   );
-
-
-   renderSettings();
-
-  };
-
- });
-
-
- const cb =
+ const coursesBox =
   document.getElementById(
    "coursesSettings"
   );
 
 
- cb.innerHTML="";
+ coursesBox.innerHTML="";
 
 
  settings.courses.forEach(
-  (course,index)=>{
+  (
+   course,
+   index
+  )=>{
 
    const row =
     document.createElement(
@@ -1681,47 +2117,59 @@ function renderSettings(){
     + '">削除</button>';
 
 
-   cb.appendChild(row);
+   coursesBox.appendChild(
+    row
+   );
 
   }
  );
 
 
- cb.querySelectorAll(
-  "[data-rmcourse]"
- ).forEach(button=>{
+ coursesBox
+  .querySelectorAll(
+   "[data-rmcourse]"
+  )
+  .forEach(
+   button=>{
 
-  button.onclick=()=>{
+    button.onclick=()=>{
 
-   if(
-    settings.courses.length <= 1
-   ){
+     if(
+      settings.courses.length
+      <=
+      1
+     ){
 
-    alert(
-     "コースは最低1つ必要です。"
-    );
+      alert(
+       "コースは最低1つ必要です。"
+      );
 
-    return;
+      return;
+
+     }
+
+
+     settings.courses.splice(
+      Number(
+       button.dataset.rmcourse
+      ),
+      1
+     );
+
+
+     renderSettings();
+
+    };
 
    }
-
-
-   settings.courses.splice(
-    Number(
-     button.dataset.rmcourse
-    ),
-    1
-   );
-
-
-   renderSettings();
-
-  };
-
- });
+  );
 
 }
 
+
+/* ==================================================
+   設定保存
+================================================== */
 
 function saveSettings(){
 
@@ -1731,13 +2179,19 @@ function saveSettings(){
     "[data-girl]"
    )
   ]
-  .map(x=>x.value.trim())
+  .map(
+   x =>
+    x.value.trim()
+  )
   .filter(Boolean);
 
 
  const courses =
   settings.courses.map(
-   (_,index)=>({
+   (
+    _,
+    index
+   )=>({
 
     name:
      document.querySelector(
@@ -1782,8 +2236,10 @@ function saveSettings(){
  if(
   courses.some(
    c =>
-    !c.name ||
-    !Number.isFinite(c.minutes) ||
+    !c.name
+    ||
+    !Number.isFinite(c.minutes)
+    ||
     c.minutes <= 0
   )
  ){
@@ -1813,9 +2269,9 @@ function saveSettings(){
 }
 
 
-/* =========================
+/* ==================================================
    女の子・コース追加
-========================= */
+================================================== */
 
 document.getElementById(
  "addGirl"
@@ -1824,6 +2280,7 @@ document.getElementById(
  settings.girls.push(
   "新しい女の子"
  );
+
 
  renderSettings();
 
@@ -1836,22 +2293,26 @@ document.getElementById(
 
  settings.courses.push({
 
-  name:"新しいコース",
+  name:
+   "新しいコース",
 
-  minutes:40,
+  minutes:
+   40,
 
-  price:10000
+  price:
+   10000
 
  });
+
 
  renderSettings();
 
 };
 
 
-/* =========================
+/* ==================================================
    集計
-========================= */
+================================================== */
 
 function openSummary(){
 
@@ -1864,7 +2325,8 @@ function openSummary(){
 
 
  for(
-  const r of reservations
+  const r
+  of reservations
  ){
 
   const c =
@@ -1880,7 +2342,9 @@ function openSummary(){
   total += price;
 
 
-  if(!totals[r.girl]){
+  if(
+   !totals[r.girl]
+  ){
 
    totals[r.girl]={
     count:0,
@@ -1892,7 +2356,8 @@ function openSummary(){
 
   totals[r.girl].count++;
 
-  totals[r.girl].total += price;
+  totals[r.girl].total +=
+   price;
 
  }
 
@@ -1901,11 +2366,13 @@ function openSummary(){
 
 
  for(
-  const girl of settings.girls
+  const girl
+  of settings.girls
  ){
 
   const d =
-   totals[girl] ||
+   totals[girl]
+   ||
    {
     count:0,
     total:0
@@ -1915,13 +2382,26 @@ function openSummary(){
   html +=
 
    '<div class="summary-item">'
-   + '<strong>'
+
+   +
+
+   '<strong>'
    + escapeHtml(girl)
-   + '</strong><br>'
-   + d.count
+   + '</strong>'
+
+   +
+
+   '<br>'
+
+   +
+
+   d.count
    + "件 ／ "
    + yen(d.total)
-   + '</div>';
+
+   +
+
+   '</div>';
 
  }
 
@@ -1938,27 +2418,33 @@ function openSummary(){
 
  document.getElementById(
   "summaryContent"
- ).innerHTML=html;
+ ).innerHTML =
+  html;
 
 
  document.getElementById(
   "summaryBack"
- ).classList.add("show");
+ ).classList.add(
+  "show"
+ );
 
 }
 
 
-/* =========================
+/* ==================================================
    ボタン
-========================= */
+================================================== */
 
 document.getElementById(
  "prevDay"
 ).onclick=()=>{
 
  currentDate.setDate(
-  currentDate.getDate()-1
+  currentDate.getDate()
+  -
+  1
  );
+
 
  render();
 
@@ -1970,8 +2456,11 @@ document.getElementById(
 ).onclick=()=>{
 
  currentDate.setDate(
-  currentDate.getDate()+1
+  currentDate.getDate()
+  +
+  1
  );
+
 
  render();
 
@@ -2038,21 +2527,25 @@ document.getElementById(
 
  document.getElementById(
   "summaryBack"
- ).classList.remove("show");
+ ).classList.remove(
+  "show"
+ );
 
 };
 
 
-/* =========================
+/* ==================================================
    モーダル外クリック
-========================= */
+================================================== */
 
 document.getElementById(
  "reservationBack"
 ).onclick=e=>{
 
  if(
-  e.target === e.currentTarget
+  e.target
+  ===
+  e.currentTarget
  ){
 
   closeReservation();
@@ -2067,7 +2560,9 @@ document.getElementById(
 ).onclick=e=>{
 
  if(
-  e.target === e.currentTarget
+  e.target
+  ===
+  e.currentTarget
  ){
 
   closeSettings();
@@ -2082,21 +2577,25 @@ document.getElementById(
 ).onclick=e=>{
 
  if(
-  e.target === e.currentTarget
+  e.target
+  ===
+  e.currentTarget
  ){
 
   document.getElementById(
    "summaryBack"
-  ).classList.remove("show");
+  ).classList.remove(
+   "show"
+  );
 
  }
 
 };
 
 
-/* =========================
+/* ==================================================
    起動
-========================= */
+================================================== */
 
 render();
 
