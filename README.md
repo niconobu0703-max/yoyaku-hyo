@@ -2,8 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>予約表</title>
 
 <style>
@@ -13,21 +12,12 @@
 
 body{
   margin:0;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Hiragino Kaku Gothic ProN",
-    "Yu Gothic",
-    Meiryo,
-    sans-serif;
-  background:#f4f5f7;
-  color:#222;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;
+  background:#fff;
+  color:#111;
 }
 
-button,
-input,
-select{
+button,input,select{
   font:inherit;
 }
 
@@ -35,372 +25,340 @@ button{
   cursor:pointer;
 }
 
-.header{
+/* =========================
+   上部
+========================= */
+
+.topbar{
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:20;
   background:#fff;
   border-bottom:1px solid #ddd;
-  padding:10px;
+  padding:12px;
 }
 
-.header-top{
-  display:flex;
-  align-items:center;
+.nav{
+  display:grid;
+  grid-template-columns:52px 1fr 52px 90px 90px;
   gap:8px;
-  flex-wrap:wrap;
+  align-items:center;
 }
 
-.header h1{
-  margin:0;
-  font-size:20px;
-  flex:1;
+.nav button,
+.datebox{
+  height:52px;
+  border-radius:12px;
+  border:1px solid #ccc;
 }
 
-.date-area{
+.nav button{
+  background:#222;
+  color:#fff;
+  font-size:28px;
+}
+
+.nav .action{
+  font-size:16px;
+}
+
+.datebox{
   display:flex;
   align-items:center;
-  gap:5px;
+  justify-content:center;
+  background:#f5f5f5;
+  font-size:20px;
 }
 
-.date-area input{
-  padding:7px;
-  border:1px solid #ccc;
-  border-radius:6px;
+/* =========================
+   予約表
+========================= */
+
+.wrap{
+  padding:16px 10px 50px;
 }
 
-.btn{
-  border:0;
-  border-radius:7px;
-  padding:8px 12px;
-  background:#333;
-  color:#fff;
-}
-
-.btn.gray{
-  background:#777;
-}
-
-.btn.blue{
-  background:#1976d2;
-}
-
-.btn.green{
-  background:#2e7d32;
-}
-
-.btn.red{
-  background:#c62828;
-}
-
-.btn.small{
-  padding:5px 8px;
-  font-size:12px;
-}
-
-.main{
-  padding:10px;
-}
-
-.info{
-  background:#fff;
-  border-radius:8px;
-  padding:10px;
-  margin-bottom:10px;
-  border:1px solid #ddd;
-}
-
-.info-row{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-  font-size:14px;
-}
-
-.notice{
-  padding:9px;
-  border-radius:7px;
-  background:#fff8e1;
-  border:1px solid #ffe082;
-  color:#795548;
-  font-size:12px;
-  margin-bottom:10px;
-}
-
-.schedule-wrap{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:8px;
+.table-wrap{
   overflow:auto;
+  border:1px solid #ddd;
+  border-radius:16px;
 }
 
 .schedule{
-  min-width:700px;
+  border-collapse:collapse;
+  width:max-content;
+  min-width:100%;
 }
 
-.schedule-head,
-.schedule-row{
-  display:grid;
-  grid-template-columns:
-    70px
-    repeat(var(--girl-count),minmax(180px,1fr));
+.schedule th,
+.schedule td{
+  border:1px solid #ddd;
 }
 
-.schedule-head{
-  position:sticky;
-  top:61px;
-  z-index:20;
-  background:#eee;
-  border-bottom:1px solid #ccc;
-}
-
-.head-time,
-.head-girl{
-  padding:8px;
-  text-align:center;
-  font-weight:bold;
-  border-right:1px solid #ddd;
-}
-
-.time-cell{
-  min-height:58px;
-  padding:5px;
-  border-right:1px solid #ddd;
-  border-bottom:1px solid #ddd;
-  text-align:center;
-  font-size:12px;
+.schedule th{
+  height:70px;
   background:#fafafa;
+  font-size:18px;
+}
+
+.time-head{
+  width:105px;
+  min-width:105px;
+  position:sticky;
+  left:0;
+  z-index:5;
+}
+
+.girl-head{
+  min-width:310px;
+}
+
+.time{
+  width:105px;
+  min-width:105px;
+  text-align:center;
+  background:#fafafa;
+  color:#666;
+  position:sticky;
+  left:0;
+  z-index:4;
 }
 
 .slot{
-  min-height:58px;
-  padding:4px;
-  border-right:1px solid #ddd;
-  border-bottom:1px solid #ddd;
+  height:110px;
+  padding:7px;
 }
 
-.slot-btn{
+/* 予約中 */
+
+.res-card{
   width:100%;
-  min-height:48px;
+  height:100%;
   border:0;
-  border-radius:6px;
-  background:#e8f5e9;
-  color:#2e7d32;
-  font-weight:bold;
-}
-
-.slot-btn:hover{
-  background:#c8e6c9;
-}
-
-.slot-unavailable{
-  width:100%;
-  min-height:48px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  border-radius:6px;
-  background:#eee;
-  color:#999;
-  font-size:12px;
-}
-
-.reservation{
-  width:100%;
-  min-height:48px;
-  border-radius:6px;
-  padding:5px;
-  background:#dbeafe;
-  border:1px solid #90caf9;
+  border-radius:11px;
+  background:#dff1ff;
+  color:#0785e8;
   text-align:left;
-  cursor:pointer;
+  padding:10px;
 }
 
-.reservation strong{
+.res-card strong{
   display:block;
-  font-size:13px;
+  font-size:18px;
 }
 
-.reservation span{
+.res-card span{
   display:block;
-  font-size:11px;
-  margin-top:2px;
+  margin-top:5px;
+  font-size:15px;
 }
 
-.modal-bg{
+.res-card small{
+  display:block;
+  margin-top:5px;
+  color:#666;
+}
+
+/* 予約可能 */
+
+.add-card{
+  width:100%;
+  height:100%;
+  border:2px dashed #ccc;
+  border-radius:11px;
+  background:#fff;
+  color:#777;
+  font-size:19px;
+}
+
+/* 予約不可 */
+
+.unavailable{
+  width:100%;
+  height:100%;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eee;
+  color:#aaa;
+  font-size:16px;
+}
+
+/* =========================
+   モーダル
+========================= */
+
+.modal-back{
   position:fixed;
   inset:0;
+  z-index:50;
   background:rgba(0,0,0,.5);
   display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
-  padding:15px;
+  align-items:flex-end;
 }
 
-.modal-bg.show{
+.modal-back.show{
   display:flex;
 }
 
 .modal{
-  width:min(520px,100%);
-  max-height:90vh;
-  overflow:auto;
   background:#fff;
-  border-radius:12px;
-  padding:18px;
-  box-shadow:0 10px 40px rgba(0,0,0,.25);
+  width:min(100%,850px);
+  max-height:92vh;
+  overflow:auto;
+  border-radius:25px 25px 0 0;
+  padding:24px 18px 30px;
 }
 
 .modal h2{
-  margin:0 0 15px;
-  font-size:20px;
+  margin:0 0 20px;
+  font-size:27px;
 }
 
-.form-group{
-  margin-bottom:13px;
+.field{
+  margin-bottom:17px;
 }
 
-.form-group label{
+.field label{
   display:block;
-  margin-bottom:5px;
-  font-weight:bold;
-  font-size:13px;
+  margin-bottom:7px;
+  color:#555;
 }
 
-.form-group input,
-.form-group select{
+.field input,
+.field select{
   width:100%;
-  padding:10px;
+  height:54px;
   border:1px solid #ccc;
-  border-radius:7px;
+  border-radius:11px;
+  padding:0 12px;
   background:#fff;
 }
 
-.modal-buttons{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:15px;
+.modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+
+.btn{
+  height:54px;
+  border:0;
+  border-radius:11px;
+  background:#eee;
+  color:#0785e8;
+}
+
+.btn.black{
+  background:#222;
+  color:#fff;
 }
 
 .error{
-  background:#ffebee;
-  color:#c62828;
-  border:1px solid #ef9a9a;
-  border-radius:7px;
-  padding:9px;
-  font-size:13px;
-  margin-top:8px;
   display:none;
+  background:#fff0f0;
+  color:#c00;
+  border-radius:10px;
+  padding:11px;
+  margin-bottom:14px;
 }
 
 .error.show{
   display:block;
 }
 
-.list-item{
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:10px;
-  margin-bottom:8px;
-  background:#fafafa;
+.info{
+  background:#f5f5f5;
+  border-radius:10px;
+  padding:11px;
+  color:#555;
+  margin-bottom:14px;
 }
 
-.list-main{
+/* =========================
+   設定
+========================= */
+
+.settings-list{
   display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
+  flex-direction:column;
+  gap:9px;
 }
 
-.list-info{
-  flex:1;
+.setting-row{
+  display:grid;
+  grid-template-columns:1fr 75px;
+  gap:8px;
 }
 
-.list-actions{
-  display:flex;
-  gap:5px;
-  align-items:center;
+.setting-row.course{
+  grid-template-columns:1fr 100px 110px 75px;
 }
 
-.settings-section{
-  margin-bottom:20px;
-}
-
-.settings-section h3{
-  margin:0 0 10px;
-}
-
-.settings-item{
-  display:flex;
-  gap:6px;
-  margin-bottom:7px;
-}
-
-.settings-item input{
-  flex:1;
+.setting-row input{
   min-width:0;
-  padding:8px;
+  height:50px;
   border:1px solid #ccc;
-  border-radius:6px;
+  border-radius:10px;
+  padding:0 10px;
 }
 
-.summary-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.summary-table th,
-.summary-table td{
-  border:1px solid #ddd;
-  padding:7px;
-  text-align:center;
-  font-size:13px;
-}
-
-.summary-table th{
+.remove{
+  height:50px;
+  border:0;
+  border-radius:10px;
   background:#eee;
+  color:#0785e8;
 }
 
-.empty{
-  text-align:center;
-  padding:20px;
-  color:#888;
+.add-line{
+  margin-top:10px;
+  width:100%;
 }
+
+/* =========================
+   集計
+========================= */
+
+.summary-item{
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:9px;
+}
+
+.total{
+  font-size:21px;
+  font-weight:bold;
+  margin-top:15px;
+}
+
+/* =========================
+   スマホ
+========================= */
 
 @media(max-width:700px){
 
-  .header h1{
-    width:100%;
-    flex:none;
+  .nav{
+    grid-template-columns:48px 1fr 48px 78px 78px;
   }
 
-  .header-top{
-    gap:5px;
+  .nav .action{
+    font-size:14px;
   }
 
-  .date-area{
-    width:100%;
+  .girl-head{
+    min-width:280px;
   }
 
-  .date-area input{
-    flex:1;
+  .setting-row.course{
+    grid-template-columns:1fr 90px 100px;
   }
 
-  .schedule-head{
-    top:105px;
-  }
-
-  .schedule{
-    min-width:650px;
-  }
-
-  .schedule-head,
-  .schedule-row{
-    grid-template-columns:
-      60px
-      repeat(var(--girl-count),minmax(160px,1fr));
+  .setting-row.course .remove{
+    grid-column:1/-1;
   }
 }
 </style>
@@ -408,183 +366,140 @@ button{
 
 <body>
 
-<header class="header">
+<!-- =========================
+     上部
+========================= -->
 
-  <div class="header-top">
+<div class="topbar">
 
-    <h1>予約表</h1>
+  <div class="nav">
 
-    <div class="date-area">
+    <button id="prevDay">‹</button>
 
-      <button
-        class="btn small gray"
-        id="prevDay"
-      >‹</button>
+    <div id="dateBox" class="datebox"></div>
 
-      <input
-        type="date"
-        id="dateInput"
-      >
+    <button id="nextDay">›</button>
 
-      <button
-        class="btn small gray"
-        id="nextDay"
-      >›</button>
-
-    </div>
-
-    <button
-      class="btn blue small"
-      id="newReservationBtn"
-    >
-      ＋予約
-    </button>
-
-    <button
-      class="btn small"
-      id="listBtn"
-    >
-      予約一覧
-    </button>
-
-    <button
-      class="btn small"
-      id="summaryBtn"
-    >
+    <button id="summaryBtn" class="action">
       集計
     </button>
 
-    <button
-      class="btn small"
-      id="settingsBtn"
-    >
+    <button id="settingsBtn" class="action">
       設定
     </button>
 
   </div>
 
-</header>
+</div>
 
 
-<main class="main">
+<!-- =========================
+     予約表
+========================= -->
 
-  <div class="notice">
-    同じ女の子の予約は、
-    <strong>予約終了から5分空けて</strong>
-    次の予約を取れます。
-  </div>
+<div class="wrap">
 
-  <div class="info">
+  <div class="table-wrap">
 
-    <div class="info-row">
+    <table class="schedule">
 
-      <div>
-        予約件数：
-        <strong id="reservationCount">0</strong>件
-      </div>
+      <thead>
+        <tr id="headRow"></tr>
+      </thead>
 
-      <div>
-        売上：
-        <strong id="totalSales">¥0</strong>
-      </div>
+      <tbody id="scheduleBody"></tbody>
 
-    </div>
+    </table>
 
   </div>
 
-  <div class="schedule-wrap">
-
-    <div
-      class="schedule"
-      id="schedule"
-      style="--girl-count:2;"
-    ></div>
-
-  </div>
-
-</main>
+</div>
 
 
-<!-- 予約 -->
+<!-- =========================
+     予約モーダル
+========================= -->
 
-<div
-  class="modal-bg"
-  id="reservationModal"
->
+<div id="reservationBack" class="modal-back">
 
   <div class="modal">
 
-    <h2 id="reservationModalTitle">
-      予約登録
+    <h2 id="reservationTitle">
+      新しい予約
     </h2>
 
-    <div class="form-group">
+    <div id="reservationError" class="error"></div>
 
-      <label>お客様名</label>
+
+    <div class="field">
+
+      <label>
+        お客様
+      </label>
 
       <input
-        type="text"
         id="customerInput"
         placeholder="お客様名"
       >
 
     </div>
 
-    <div class="form-group">
 
-      <label>女の子</label>
+    <div class="field">
 
-      <select id="girlInput"></select>
+      <label>
+        女の子
+      </label>
+
+      <select id="girlSelect"></select>
 
     </div>
 
-    <div class="form-group">
 
-      <label>開始時間</label>
+    <div class="field">
+
+      <label>
+        開始時間（1分単位）
+      </label>
 
       <input
-        type="time"
         id="timeInput"
-        step="300"
+        type="time"
+        step="60"
       >
 
     </div>
 
-    <div class="form-group">
 
-      <label>コース</label>
+    <div class="field">
 
-      <select id="courseInput"></select>
+      <label>
+        コース
+      </label>
+
+      <select id="courseSelect"></select>
 
     </div>
+
 
     <div
-      class="error"
-      id="reservationError"
-    ></div>
+      id="reservationHint"
+      class="info">
+    </div>
 
-    <div class="modal-buttons">
 
-      <button
-        class="btn green"
-        id="saveReservationBtn"
-      >
-        保存
-      </button>
+    <div class="modal-actions">
 
       <button
-        class="btn gray"
-        id="cancelReservationBtn"
-      >
+        class="btn"
+        id="cancelReservation">
         キャンセル
       </button>
 
       <button
-        class="btn red"
-        id="deleteReservationBtn"
-        style="display:none;"
-      >
-        削除
+        class="btn black"
+        id="saveReservation">
+        保存
       </button>
 
     </div>
@@ -594,120 +509,99 @@ button{
 </div>
 
 
-<!-- 予約一覧 -->
+<!-- =========================
+     設定モーダル
+========================= -->
 
-<div
-  class="modal-bg"
-  id="listModal"
->
-
-  <div class="modal">
-
-    <h2>予約一覧</h2>
-
-    <div id="reservationList"></div>
-
-    <div class="modal-buttons">
-
-      <button
-        class="btn gray"
-        id="closeListBtn"
-      >
-        閉じる
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- 集計 -->
-
-<div
-  class="modal-bg"
-  id="summaryModal"
->
+<div id="settingsBack" class="modal-back">
 
   <div class="modal">
 
-    <h2>集計</h2>
-
-    <div id="summaryContent"></div>
-
-    <div class="modal-buttons">
-
-      <button
-        class="btn gray"
-        id="closeSummaryBtn"
-      >
-        閉じる
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
+    <h2>
+      設定
+    </h2>
 
 
-<!-- 設定 -->
+    <div class="field">
 
-<div
-  class="modal-bg"
-  id="settingsModal"
->
+      <label>
+        女の子
+      </label>
 
-  <div class="modal">
-
-    <h2>設定</h2>
-
-    <div class="settings-section">
-
-      <h3>女の子</h3>
-
-      <div id="girlsSettings"></div>
+      <div
+        id="girlsSettings"
+        class="settings-list">
+      </div>
 
       <button
-        class="btn blue small"
-        id="addGirlBtn"
-      >
-        ＋女の子追加
+        class="btn add-line"
+        id="addGirl">
+        ＋ 女の子を追加
       </button>
 
     </div>
 
 
-    <div class="settings-section">
+    <div class="field">
 
-      <h3>コース</h3>
+      <label>
+        コース（コース名・分数・料金）
+      </label>
 
-      <div id="coursesSettings"></div>
+      <div
+        id="coursesSettings"
+        class="settings-list">
+      </div>
 
       <button
-        class="btn blue small"
-        id="addCourseBtn"
-      >
-        ＋コース追加
+        class="btn add-line"
+        id="addCourse">
+        ＋ コースを追加
       </button>
 
     </div>
 
 
-    <div class="modal-buttons">
+    <div class="modal-actions">
 
       <button
-        class="btn green"
-        id="saveSettingsBtn"
-      >
+        class="btn"
+        id="cancelSettings">
+        キャンセル
+      </button>
+
+      <button
+        class="btn black"
+        id="saveSettings">
         設定を保存
       </button>
 
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     集計モーダル
+========================= -->
+
+<div id="summaryBack" class="modal-back">
+
+  <div class="modal">
+
+    <h2>
+      集計
+    </h2>
+
+    <div id="summaryContent"></div>
+
+    <div class="modal-actions">
+
       <button
-        class="btn gray"
-        id="closeSettingsBtn"
-      >
+        class="btn black"
+        id="closeSummary">
         閉じる
       </button>
 
@@ -723,33 +617,93 @@ button{
 "use strict";
 
 
-/* =====================================================
-   基本設定
-===================================================== */
-
-const START_TIME = 10 * 60;
-const END_TIME = 24 * 60;
-
 /*
-  ★★★ 重要 ★★★
+============================================================
+予約ルール
+============================================================
 
-  予約終了から5分空ける。
+★予約開始時間は「1分単位」
 
-  例：
+10:50
+10:51
+10:52
+10:53
+10:54
+...
 
-  10:00～10:40
-  ↓
-  10:40～10:50 は空ける
-  ↓
-  10:50から予約可能
+全部予約可能。
+
+
+★予約終了後は10分空ける
+
+
+例①
+
+10:00〜10:40 予約
+
+10:40 ❌
+10:41 ❌
+10:42 ❌
+10:43 ❌
+10:44 ❌
+10:45 ❌
+10:46 ❌
+10:47 ❌
+10:48 ❌
+10:49 ❌
+
+10:50 ⭕
+
+
+例②
+
+10:53から60分予約
+
+10:53〜11:53
+
+11:53 ❌
+11:54 ❌
+11:55 ❌
+11:56 ❌
+11:57 ❌
+11:58 ❌
+11:59 ❌
+12:00 ❌
+12:01 ❌
+12:02 ❌
+
+12:03 ⭕
+
+
+★つまり
+
+「終了時間 + 10分」
+
+から次の予約が可能。
+
+
+★予約表の表示は10分刻み。
+
+ただし予約そのものの開始時間は1分単位。
+
+
+============================================================
 */
 
-const GAP = 5;
+
+const START_TIME = 10 * 60;
+
+const END_TIME = 24 * 60;
 
 
-/* =====================================================
-   初期データ
-===================================================== */
+/*
+  ★ここが重要
+
+  10分空ける
+*/
+
+const GAP_MINUTES = 10;
+
 
 const DEFAULT_GIRLS = [
   "ことねさん",
@@ -762,247 +716,269 @@ const DEFAULT_COURSES = [
   {
     name:"40分",
     minutes:40,
-    price:8000
+    price:10000
   },
 
   {
     name:"60分",
     minutes:60,
-    price:11000
+    price:14000
   },
 
   {
     name:"90分",
     minutes:90,
-    price:16000
+    price:20000
   },
 
   {
     name:"100分",
     minutes:100,
-    price:18000
+    price:22000
   },
 
   {
     name:"120分",
     minutes:120,
-    price:22000
+    price:26000
   }
 
 ];
 
 
-/* =====================================================
-   状態
-===================================================== */
+const SETTINGS_KEY =
+  "yoyaku_settings_final_v6";
 
-let girls = loadGirls();
 
-let courses = loadCourses();
+const RES_PREFIX =
+  "yoyaku_reservations_final_v6_";
 
-let currentDate = "";
+
+let settings =
+  loadSettings();
+
+
+let currentDate =
+  new Date();
+
 
 let reservations = [];
 
-let editingReservationId = null;
+
+let editingId =
+  null;
 
 
-/* =====================================================
-   DOM
-===================================================== */
+/* =========================================================
+   共通
+========================================================= */
 
-const dateInput =
-  document.getElementById("dateInput");
+function pad(n){
 
-const schedule =
-  document.getElementById("schedule");
+  return String(n).padStart(2,"0");
 
-const reservationModal =
-  document.getElementById("reservationModal");
+}
 
-const listModal =
-  document.getElementById("listModal");
 
-const summaryModal =
-  document.getElementById("summaryModal");
+function dateKey(d){
 
-const settingsModal =
-  document.getElementById("settingsModal");
-
-const customerInput =
-  document.getElementById("customerInput");
-
-const girlInput =
-  document.getElementById("girlInput");
-
-const timeInput =
-  document.getElementById("timeInput");
-
-const courseInput =
-  document.getElementById("courseInput");
-
-const reservationError =
-  document.getElementById("reservationError");
-
-const reservationModalTitle =
-  document.getElementById(
-    "reservationModalTitle"
+  return (
+    d.getFullYear()
+    + "-"
+    + pad(d.getMonth()+1)
+    + "-"
+    + pad(d.getDate())
   );
 
-const deleteReservationBtn =
-  document.getElementById(
-    "deleteReservationBtn"
+}
+
+
+function formatDate(d){
+
+  return (
+    d.getFullYear()
+    + "/"
+    + pad(d.getMonth()+1)
+    + "/"
+    + pad(d.getDate())
   );
 
+}
 
-/* =====================================================
-   LocalStorage
-===================================================== */
 
-function getGirlsKey(){
+function minutesToTime(m){
 
-  return "reservation_girls";
+  return (
+    pad(Math.floor(m/60))
+    + ":"
+    + pad(m%60)
+  );
 
 }
 
 
-function getCoursesKey(){
+function timeToMinutes(v){
 
-  return "reservation_courses";
+  const m =
+    String(v || "")
+      .match(/^(\d{1,2}):(\d{2})$/);
+
+  return m
+    ? Number(m[1])*60 + Number(m[2])
+    : NaN;
 
 }
 
 
-function getReservationKey(date){
+function escapeHtml(v){
 
-  return "reservations_" + date;
+  return String(v ?? "")
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
 
 }
 
 
-function loadGirls(){
+function yen(n){
+
+  return (
+    "¥"
+    + Number(n || 0)
+      .toLocaleString("ja-JP")
+  );
+
+}
+
+
+/* =========================================================
+   設定
+========================================================= */
+
+function normalizeSettings(s){
+
+  const girls =
+    (Array.isArray(s?.girls)
+      ? s.girls
+      : DEFAULT_GIRLS)
+
+      .map(String)
+      .map(x => x.trim())
+      .filter(Boolean);
+
+
+  const courses =
+    (Array.isArray(s?.courses)
+      ? s.courses
+      : DEFAULT_COURSES)
+
+      .map(c => ({
+
+        name:
+          String(c.name ?? "").trim(),
+
+        minutes:
+          Number(c.minutes),
+
+        price:
+          Number(c.price)
+
+      }))
+
+      .filter(c =>
+        c.name &&
+        Number.isFinite(c.minutes) &&
+        c.minutes > 0
+      );
+
+
+  return {
+
+    girls:
+      [...new Set(
+        girls.length
+          ? girls
+          : DEFAULT_GIRLS
+      )],
+
+    courses:
+      courses.length
+        ? courses
+        : structuredClone(DEFAULT_COURSES)
+
+  };
+
+}
+
+
+function loadSettings(){
 
   try{
 
-    const data =
+    const raw =
       localStorage.getItem(
-        getGirlsKey()
+        SETTINGS_KEY
       );
 
-    if(!data){
-      return [...DEFAULT_GIRLS];
-    }
-
-    const parsed =
-      JSON.parse(data);
-
-    if(
-      !Array.isArray(parsed) ||
-      parsed.length === 0
-    ){
-
-      return [...DEFAULT_GIRLS];
-
-    }
-
-    return parsed;
-
-  }catch(error){
-
-    return [...DEFAULT_GIRLS];
-
-  }
-
-}
-
-
-function loadCourses(){
-
-  try{
-
-    const data =
-      localStorage.getItem(
-        getCoursesKey()
-      );
-
-    if(!data){
-
-      return DEFAULT_COURSES.map(
-        course => ({...course})
-      );
-
-    }
-
-    const parsed =
-      JSON.parse(data);
-
-    if(
-      !Array.isArray(parsed) ||
-      parsed.length === 0
-    ){
-
-      return DEFAULT_COURSES.map(
-        course => ({...course})
-      );
-
-    }
-
-    return parsed;
-
-  }catch(error){
-
-    return DEFAULT_COURSES.map(
-      course => ({...course})
+    return normalizeSettings(
+      raw
+        ? JSON.parse(raw)
+        : {}
     );
 
+  }catch(e){
+
+    return normalizeSettings({});
+
   }
 
 }
 
 
-function saveGirls(){
+function saveSettingsStorage(){
 
   localStorage.setItem(
-    getGirlsKey(),
-    JSON.stringify(girls)
+    SETTINGS_KEY,
+    JSON.stringify(settings)
   );
 
 }
 
 
-function saveCourses(){
-
-  localStorage.setItem(
-    getCoursesKey(),
-    JSON.stringify(courses)
-  );
-
-}
-
+/* =========================================================
+   予約データ
+========================================================= */
 
 function loadReservations(){
 
   try{
 
-    const data =
+    const raw =
       localStorage.getItem(
-        getReservationKey(currentDate)
+        RES_PREFIX + dateKey(currentDate)
       );
 
-    if(!data){
-      return [];
+    reservations =
+      raw
+        ? JSON.parse(raw)
+        : [];
+
+    if(!Array.isArray(reservations)){
+
+      reservations = [];
+
     }
 
-    const parsed =
-      JSON.parse(data);
+  }catch(e){
 
-    return Array.isArray(parsed)
-      ? parsed
-      : [];
-
-  }catch(error){
-
-    return [];
+    reservations = [];
 
   }
 
@@ -1012,265 +988,96 @@ function loadReservations(){
 function saveReservations(){
 
   localStorage.setItem(
-    getReservationKey(currentDate),
+
+    RES_PREFIX + dateKey(currentDate),
+
     JSON.stringify(reservations)
+
   );
 
 }
 
 
-/* =====================================================
-   日付
-===================================================== */
+function getCourse(name){
 
-function getTodayString(){
-
-  const date =
-    new Date();
-
-  const year =
-    date.getFullYear();
-
-  const month =
-    String(date.getMonth() + 1)
-      .padStart(2,"0");
-
-  const day =
-    String(date.getDate())
-      .padStart(2,"0");
-
-  return `${year}-${month}-${day}`;
+  return settings.courses.find(
+    c =>
+      String(c.name)
+      ===
+      String(name)
+  ) || null;
 
 }
 
 
-function changeDate(date){
+function getDuration(r){
 
-  currentDate = date;
+  const c =
+    getCourse(r.course);
 
-  dateInput.value = date;
-
-  reservations =
-    loadReservations();
-
-  render();
+  return c
+    ? Number(c.minutes)
+    : Number(r.minutes) || 0;
 
 }
 
 
-/* =====================================================
-   時間
-===================================================== */
-
-function timeToMinutes(time){
-
-  if(!time){
-    return NaN;
-  }
-
-  const parts =
-    String(time).split(":");
-
-  if(parts.length !== 2){
-    return NaN;
-  }
-
-  const hour =
-    Number(parts[0]);
-
-  const minute =
-    Number(parts[1]);
-
-  if(
-    !Number.isFinite(hour) ||
-    !Number.isFinite(minute)
-  ){
-
-    return NaN;
-
-  }
-
-  return hour * 60 + minute;
-
-}
-
-
-function minutesToTime(minutes){
-
-  const hour =
-    Math.floor(minutes / 60);
-
-  const minute =
-    minutes % 60;
+function getEnd(r){
 
   return (
-    String(hour).padStart(2,"0") +
-    ":" +
-    String(minute).padStart(2,"0")
+    timeToMinutes(r.time)
+    +
+    getDuration(r)
   );
 
 }
 
 
-function formatYen(value){
+/* =========================================================
+   ★予約可能判定
+========================================================= */
 
-  return (
-    "¥" +
-    Number(value || 0)
-      .toLocaleString("ja-JP")
-  );
-
-}
-
-
-/* =====================================================
-   HTMLエスケープ
-===================================================== */
-
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================================
-   ID
-===================================================== */
-
-function createId(){
-
-  return (
-    Date.now().toString(36) +
-    Math.random()
-      .toString(36)
-      .substring(2,8)
-  );
-
-}
-
-
-/* =====================================================
-   コース取得
-===================================================== */
-
-function getCourseByMinutes(minutes){
-
-  return courses.find(
-    course =>
-      Number(course.minutes) ===
-      Number(minutes)
-  );
-
-}
-
-
-/* =====================================================
-   予約終了時間
-===================================================== */
-
-function getReservationEnd(
-  reservation
-){
-
-  const start =
-    timeToMinutes(
-      reservation.time
-    );
-
-  const duration =
-    Number(reservation.course);
-
-  return start + duration;
-
-}
-
-
-/* =====================================================
-   ★★★ 予約可能判定 ★★★
-=====================================================
-
-   ここが最重要。
-
-   既存予約：
-   10:00～10:40
-
-   新しい予約：
-
-   10:40 → NG
-   10:45 → NG
-   10:50 → OK
-
-   GAP = 5なので、
-
-   新しい予約開始
-   >=
-   既存予約終了 + 5分
-
-   ならOK。
-
-===================================================== */
-
-function isReservationTimeAvailable(
+function isAvailable(
   girl,
-  startTime,
+  start,
   duration,
   excludeId = null
 ){
 
   const newStart =
-    timeToMinutes(startTime);
-
-  const newDuration =
-    Number(duration);
-
-  if(
-    !Number.isFinite(newStart) ||
-    !Number.isFinite(newDuration) ||
-    newDuration <= 0
-  ){
-
-    return false;
-
-  }
-
+    Number(start);
 
   const newEnd =
-    newStart + newDuration;
+    newStart + Number(duration);
 
 
-  if(newStart < START_TIME){
-    return false;
-  }
-
-
-  if(newEnd > END_TIME){
-    return false;
-  }
-
-
-  for(
-    const oldReservation of reservations
+  if(
+    !Number.isFinite(newStart)
+    ||
+    !Number.isFinite(newEnd)
   ){
 
+    return false;
+
+  }
+
+
+  if(
+    newStart < START_TIME
+    ||
+    newEnd > END_TIME
+  ){
+
+    return false;
+
+  }
+
+
+  for(const r of reservations){
+
     if(
-      excludeId &&
-      String(oldReservation.id) ===
-      String(excludeId)
-    ){
-
-      continue;
-
-    }
-
-
-    if(
-      String(oldReservation.girl) !==
+      String(r.girl)
+      !==
       String(girl)
     ){
 
@@ -1279,62 +1086,100 @@ function isReservationTimeAvailable(
     }
 
 
-    const oldStart =
-      timeToMinutes(
-        oldReservation.time
-      );
-
-    const oldEnd =
-      getReservationEnd(
-        oldReservation
-      );
-
-
     /*
-      新しい予約を
-      既存予約の前に入れる場合
-
-      例：
-
-      既存 11:00～
-      新規 10:15～10:55
-
-      10:55 + 5 = 11:00
-      → OK
-    */
-
-    const canBeBefore =
-      newEnd + GAP <= oldStart;
-
-
-    /*
-      新しい予約を
-      既存予約の後に入れる場合
-
-      例：
-
-      既存 10:00～10:40
-
-      新規 10:50～
-      → OK
-
-      新規 10:45～
-      → NG
-    */
-
-    const canBeAfter =
-      newStart >= oldEnd + GAP;
-
-
-    /*
-      前にも後にも入らない
-      → 重複
-      → NG
+      編集中の自分自身は除外
     */
 
     if(
-      !canBeBefore &&
-      !canBeAfter
+      excludeId !== null
+      &&
+      String(r.id)
+      ===
+      String(excludeId)
+    ){
+
+      continue;
+
+    }
+
+
+    const oldStart =
+      timeToMinutes(r.time);
+
+
+    const oldEnd =
+      getEnd(r);
+
+
+    /*
+    ========================================================
+    既存予約より後に入れる場合
+
+    既存
+    10:00〜10:40
+
+    新規
+    10:50 → OK
+
+    10:49 → NG
+    ========================================================
+    */
+
+    if(newStart >= oldStart){
+
+      if(
+        newStart
+        <
+        oldEnd + GAP_MINUTES
+      ){
+
+        return false;
+
+      }
+
+    }
+
+
+    /*
+    ========================================================
+    既存予約より前に入れる場合
+
+    既存
+    12:00〜13:00
+
+    新規60分
+
+    10:50〜11:50 → OK
+    11:00〜12:00 → NG
+
+    「新規終了 + 10分」
+    が既存開始以下ならOK
+    ========================================================
+    */
+
+    if(newStart < oldStart){
+
+      if(
+        newEnd + GAP_MINUTES
+        >
+        oldStart
+      ){
+
+        return false;
+
+      }
+
+    }
+
+
+    /*
+    念のため重複もチェック
+    */
+
+    if(
+      newStart < oldEnd
+      &&
+      newEnd > oldStart
     ){
 
       return false;
@@ -1349,472 +1194,368 @@ function isReservationTimeAvailable(
 }
 
 
-/* =====================================================
-   競合予約検索
-===================================================== */
+/* =========================================================
+   予約表の表示
+========================================================= */
 
-function findConflictReservation(
+function coveringReservation(
   girl,
-  time,
-  duration,
-  excludeId = null
+  t
 ){
 
-  const newStart =
-    timeToMinutes(time);
-
-  const newEnd =
-    newStart + Number(duration);
-
-
-  for(
-    const reservation of reservations
-  ){
+  return reservations.find(r => {
 
     if(
-      excludeId &&
-      String(reservation.id) ===
-      String(excludeId)
-    ){
-
-      continue;
-
-    }
-
-
-    if(
-      String(reservation.girl) !==
+      String(r.girl)
+      !==
       String(girl)
     ){
 
-      continue;
-
-    }
-
-
-    const oldStart =
-      timeToMinutes(
-        reservation.time
-      );
-
-    const oldEnd =
-      getReservationEnd(
-        reservation
-      );
-
-
-    const canBeBefore =
-      newEnd + GAP <= oldStart;
-
-
-    const canBeAfter =
-      newStart >= oldEnd + GAP;
-
-
-    if(
-      !canBeBefore &&
-      !canBeAfter
-    ){
-
-      return reservation;
-
-    }
-
-  }
-
-
-  return null;
-
-}
-
-
-/* =====================================================
-   ★ グリッド予約可能判定
-===================================================== */
-
-function isGridTimeAvailable(
-  girl,
-  gridTime
-){
-
-  /*
-    その時間から
-    少なくとも1コース予約できるなら
-    ＋予約を表示。
-  */
-
-  for(
-    const course of courses
-  ){
-
-    if(
-      isReservationTimeAvailable(
-        girl,
-        gridTime,
-        Number(course.minutes)
-      )
-    ){
-
-      return true;
-
-    }
-
-  }
-
-
-  return false;
-
-}
-
-
-/* =====================================================
-   ★★★ 既存予約中の表示判定 ★★★
-=====================================================
-
-   ここが前回の問題だったところ。
-
-   10:00～10:40の場合：
-
-   10:00 → 予約
-   10:10 → 予約不可
-   10:20 → 予約不可
-   10:30 → 予約不可
-   10:40 → 予約不可
-   10:50 → ＋予約
-
-   つまり、
-   「終了 + 5分」まで全部禁止
-   ではありません。
-
-   10:40は予約終了時刻なので不可。
-   10:50は5分空いたのでOK。
-
-===================================================== */
-
-function isInsideExistingReservation(
-  girl,
-  gridMinutes
-){
-
-  for(
-    const reservation of reservations
-  ){
-
-    if(
-      String(reservation.girl) !==
-      String(girl)
-    ){
-
-      continue;
+      return false;
 
     }
 
 
     const start =
-      timeToMinutes(
-        reservation.time
-      );
+      timeToMinutes(r.time);
+
 
     const end =
-      getReservationEnd(
-        reservation
-      );
+      getEnd(r);
 
 
-    /*
-      予約開始～予約終了までは不可。
+    return (
+      t >= start
+      &&
+      t < end
+    );
 
-      10:00～10:40なら
+  }) || null;
 
-      10:10
-      10:20
-      10:30
-      10:40
+}
 
-      が不可。
 
-      10:50はここに入らない。
-    */
+function isGridAvailable(
+  girl,
+  t
+){
 
-    if(
-      gridMinutes > start &&
-      gridMinutes <= end
+  /*
+    表示は10分刻み。
+
+    その10分地点から
+    どれかのコースが
+    予約可能なら＋予約。
+  */
+
+  return settings.courses.some(
+    course =>
+      isAvailable(
+        girl,
+        t,
+        course.minutes
+      )
+  );
+
+}
+
+
+/* =========================================================
+   描画
+========================================================= */
+
+function render(){
+
+  document.getElementById(
+    "dateBox"
+  ).textContent =
+    formatDate(currentDate);
+
+
+  loadReservations();
+
+
+  document.getElementById(
+    "headRow"
+  ).innerHTML =
+
+    '<th class="time-head">時間</th>'
+
+    +
+
+    settings.girls
+      .map(g =>
+        `<th class="girl-head">
+          ${escapeHtml(g)}
+        </th>`
+      )
+      .join("");
+
+
+  const body =
+    document.getElementById(
+      "scheduleBody"
+    );
+
+
+  body.innerHTML = "";
+
+
+  /*
+    表示は10分刻み
+  */
+
+  for(
+    let t = START_TIME;
+    t < END_TIME;
+    t += 10
+  ){
+
+    const tr =
+      document.createElement("tr");
+
+
+    const timeTd =
+      document.createElement("td");
+
+    timeTd.className =
+      "time";
+
+    timeTd.textContent =
+      minutesToTime(t);
+
+    tr.appendChild(timeTd);
+
+
+    for(
+      const girl
+      of settings.girls
     ){
 
-      return true;
+      const td =
+        document.createElement("td");
+
+      td.className =
+        "slot";
+
+
+      const r =
+        coveringReservation(
+          girl,
+          t
+        );
+
+
+      /*
+      予約中
+      */
+
+      if(r){
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+        button.className =
+          "res-card";
+
+
+        button.innerHTML =
+
+          `<strong>
+            ${escapeHtml(r.time)}
+            〜
+            ${escapeHtml(
+              minutesToTime(
+                getEnd(r)
+              )
+            )}
+          </strong>`
+
+          +
+
+          `<span>
+            ${escapeHtml(
+              r.customer || "お客様"
+            )}
+            /
+            ${escapeHtml(r.course)}
+          </span>`
+
+          +
+
+          `<small>
+            タップで編集
+          </small>`;
+
+
+        button.onclick =
+          () => openEdit(r.id);
+
+
+        td.appendChild(button);
+
+      }
+
+
+      /*
+      予約可能
+      */
+
+      else if(
+        isGridAvailable(
+          girl,
+          t
+        )
+      ){
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+        button.className =
+          "add-card";
+
+        button.textContent =
+          "＋ 予約";
+
+
+        button.onclick =
+          () =>
+            openNew(
+              girl,
+              t
+            );
+
+
+        td.appendChild(button);
+
+      }
+
+
+      /*
+      予約不可
+      */
+
+      else{
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+        div.className =
+          "unavailable";
+
+        div.textContent =
+          "予約不可";
+
+
+        td.appendChild(div);
+
+      }
+
+
+      tr.appendChild(td);
 
     }
+
+
+    body.appendChild(tr);
 
   }
 
+}
 
-  return false;
+
+/* =========================================================
+   予約モーダル
+========================================================= */
+
+function fillGirlSelect(){
+
+  const select =
+    document.getElementById(
+      "girlSelect"
+    );
+
+
+  select.innerHTML =
+    settings.girls
+
+      .map(g =>
+        `<option value="${escapeHtml(g)}">
+          ${escapeHtml(g)}
+        </option>`
+      )
+
+      .join("");
 
 }
 
 
-/* =====================================================
-   予約フォーム
-===================================================== */
+function fillCourseSelect(){
 
-function populateGirlSelect(){
+  const select =
+    document.getElementById(
+      "courseSelect"
+    );
 
-  girlInput.innerHTML = "";
 
-  girls.forEach(
-    girl => {
+  select.innerHTML =
+    settings.courses
 
-      const option =
-        document.createElement("option");
+      .map(c =>
+        `<option value="${escapeHtml(c.name)}">
+          ${escapeHtml(c.name)}
+          （${c.minutes}分 /
+          ${yen(c.price)}）
+        </option>`
+      )
 
-      option.value = girl;
-
-      option.textContent = girl;
-
-      girlInput.appendChild(option);
-
-    }
-  );
+      .join("");
 
 }
 
 
-function populateCourseSelect(){
+function updateHint(){
 
-  courseInput.innerHTML = "";
-
-  courses.forEach(
-    course => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        String(course.minutes);
-
-      option.textContent =
-        `${course.name} ${formatYen(course.price)}`;
-
-      courseInput.appendChild(option);
-
-    }
-  );
-
-}
+  const girl =
+    document.getElementById(
+      "girlSelect"
+    ).value;
 
 
-function openNewReservation(
-  girl = null,
-  time = null
-){
+  const time =
+    document.getElementById(
+      "timeInput"
+    ).value;
 
-  editingReservationId = null;
 
-  reservationModalTitle.textContent =
-    "予約登録";
+  const course =
+    getCourse(
+      document.getElementById(
+        "courseSelect"
+      ).value
+    );
 
-  customerInput.value = "";
 
-  populateGirlSelect();
-
-  populateCourseSelect();
+  const hint =
+    document.getElementById(
+      "reservationHint"
+    );
 
 
   if(
-    girl &&
-    girls.includes(girl)
+    !course
+    ||
+    !time
   ){
 
-    girlInput.value = girl;
-
-  }else if(girls.length){
-
-    girlInput.value =
-      girls[0];
-
-  }
-
-
-  if(time){
-
-    timeInput.value =
-      time;
-
-  }else{
-
-    timeInput.value =
-      "10:00";
-
-  }
-
-
-  if(courses.length){
-
-    courseInput.value =
-      String(
-        courses[0].minutes
-      );
-
-  }
-
-
-  deleteReservationBtn.style.display =
-    "none";
-
-  clearReservationError();
-
-  reservationModal.classList.add(
-    "show"
-  );
-
-}
-
-
-function openEditReservation(id){
-
-  const reservation =
-    reservations.find(
-      reservation =>
-        String(reservation.id) ===
-        String(id)
-    );
-
-
-  if(!reservation){
-    return;
-  }
-
-
-  editingReservationId =
-    reservation.id;
-
-
-  reservationModalTitle.textContent =
-    "予約編集";
-
-
-  customerInput.value =
-    reservation.customer || "";
-
-
-  populateGirlSelect();
-
-  populateCourseSelect();
-
-
-  girlInput.value =
-    reservation.girl;
-
-
-  timeInput.value =
-    reservation.time;
-
-
-  courseInput.value =
-    String(reservation.course);
-
-
-  deleteReservationBtn.style.display =
-    "inline-block";
-
-
-  clearReservationError();
-
-
-  reservationModal.classList.add(
-    "show"
-  );
-
-}
-
-
-function closeReservationModal(){
-
-  reservationModal.classList.remove(
-    "show"
-  );
-
-  editingReservationId = null;
-
-  clearReservationError();
-
-}
-
-
-function showReservationError(
-  message
-){
-
-  reservationError.textContent =
-    message;
-
-  reservationError.classList.add(
-    "show"
-  );
-
-}
-
-
-function clearReservationError(){
-
-  reservationError.textContent = "";
-
-  reservationError.classList.remove(
-    "show"
-  );
-
-}
-
-
-/* =====================================================
-   予約保存
-===================================================== */
-
-function saveReservation(){
-
-  clearReservationError();
-
-
-  const customer =
-    customerInput.value.trim();
-
-  const girl =
-    girlInput.value;
-
-  const time =
-    timeInput.value;
-
-  const duration =
-    Number(courseInput.value);
-
-
-  if(!girl){
-
-    showReservationError(
-      "女の子を選択してください。"
-    );
-
-    return;
-
-  }
-
-
-  if(!time){
-
-    showReservationError(
-      "開始時間を入力してください。"
-    );
-
-    return;
-
-  }
-
-
-  if(!duration){
-
-    showReservationError(
-      "コースを選択してください。"
-    );
+    hint.textContent =
+      "";
 
     return;
 
@@ -1824,1290 +1565,633 @@ function saveReservation(){
   const start =
     timeToMinutes(time);
 
+
   const end =
-    start + duration;
-
-
-  if(
-    start < START_TIME
-  ){
-
-    showReservationError(
-      `${minutesToTime(START_TIME)}以降で入力してください。`
-    );
-
-    return;
-
-  }
-
-
-  if(
-    end > END_TIME
-  ){
-
-    showReservationError(
-      "営業時間内に収まる時間で予約してください。"
-    );
-
-    return;
-
-  }
-
-
-  /*
-    ★ 5分ルール
-  */
-
-  const available =
-    isReservationTimeAvailable(
-      girl,
-      time,
-      duration,
-      editingReservationId
-    );
-
-
-  if(!available){
-
-    const conflict =
-      findConflictReservation(
-        girl,
-        time,
-        duration,
-        editingReservationId
-      );
-
-
-    if(conflict){
-
-      const oldEnd =
-        getReservationEnd(
-          conflict
-        );
-
-      const nextAvailable =
-        oldEnd + GAP;
-
-
-      if(
-        start >=
-        timeToMinutes(conflict.time)
-      ){
-
-        showReservationError(
-          `${conflict.time}～${minutesToTime(oldEnd)}に予約があります。` +
-          `次に予約できるのは${minutesToTime(nextAvailable)}以降です。`
-        );
-
-      }else{
-
-        showReservationError(
-          `${conflict.time}～${minutesToTime(oldEnd)}の予約と重なっています。`
-        );
-
-      }
-
-    }else{
-
-      showReservationError(
-        "同じ女の子の予約と重なっています。5分以上空けてください。"
-      );
-
-    }
-
-    return;
-
-  }
-
-
-  /*
-    編集
-  */
-
-  if(editingReservationId){
-
-    const index =
-      reservations.findIndex(
-        reservation =>
-          String(reservation.id) ===
-          String(editingReservationId)
-      );
-
-
-    if(index !== -1){
-
-      reservations[index] = {
-
-        ...reservations[index],
-
-        customer,
-
-        girl,
-
-        time,
-
-        course:duration
-
-      };
-
-    }
-
-  }else{
-
-    /*
-      新規
-    */
-
-    reservations.push({
-
-      id:createId(),
-
-      customer,
-
-      girl,
-
-      time,
-
-      course:duration,
-
-      createdAt:Date.now()
-
-    });
-
-  }
-
-
-  saveReservations();
-
-  closeReservationModal();
-
-  render();
-
-}
-
-
-/* =====================================================
-   削除
-===================================================== */
-
-function deleteCurrentReservation(){
-
-  if(!editingReservationId){
-    return;
-  }
-
-
-  const reservation =
-    reservations.find(
-      reservation =>
-        String(reservation.id) ===
-        String(editingReservationId)
-    );
-
-
-  if(!reservation){
-    return;
-  }
+    start + course.minutes;
 
 
   const ok =
-    confirm(
-      `${reservation.customer || "この予約"}を削除しますか？`
+    isAvailable(
+      girl,
+      start,
+      course.minutes,
+      editingId
     );
 
 
-  if(!ok){
-    return;
-  }
+  hint.textContent =
 
-
-  reservations =
-    reservations.filter(
-      reservation =>
-        String(reservation.id) !==
-        String(editingReservationId)
-    );
-
-
-  saveReservations();
-
-  closeReservationModal();
-
-  render();
+    `${time}〜${minutesToTime(end)}`
+    +
+    `　／　${course.minutes}分`
+    +
+    `　／　${yen(course.price)}`
+    +
+    (ok
+      ? ""
+      : "　⚠ この時間は予約できません");
 
 }
 
 
-/* =====================================================
-   スケジュール描画
-===================================================== */
-
-function render(){
-
-  schedule.style.setProperty(
-    "--girl-count",
-    Math.max(girls.length,1)
-  );
-
-
-  let html = "";
-
-
-  /*
-    ヘッダー
-  */
-
-  html += `
-    <div class="schedule-head">
-
-      <div class="head-time">
-        時間
-      </div>
-  `;
-
-
-  girls.forEach(
-    girl => {
-
-      html += `
-        <div class="head-girl">
-          ${escapeHtml(girl)}
-        </div>
-      `;
-
-    }
-  );
-
-
-  html += `
-    </div>
-  `;
-
-
-  /*
-    10分刻み
-  */
-
-  for(
-    let minutes = START_TIME;
-    minutes < END_TIME;
-    minutes += 10
-  ){
-
-    const time =
-      minutesToTime(minutes);
-
-
-    html += `
-      <div class="schedule-row">
-
-        <div class="time-cell">
-          ${time}
-        </div>
-    `;
-
-
-    girls.forEach(
-      girl => {
-
-        const reservation =
-          getReservationStartingAt(
-            girl,
-            time
-          );
-
-
-        /*
-          その時間に予約開始
-        */
-
-        if(reservation){
-
-          const end =
-            getReservationEnd(
-              reservation
-            );
-
-
-          const course =
-            getCourseByMinutes(
-              reservation.course
-            );
-
-
-          html += `
-
-            <div class="slot">
-
-              <button
-                class="reservation"
-                type="button"
-                data-edit-id="${escapeHtml(reservation.id)}"
-              >
-
-                <strong>
-                  ${escapeHtml(
-                    reservation.customer ||
-                    "予約"
-                  )}
-                </strong>
-
-                <span>
-                  ${escapeHtml(reservation.time)}
-                  ～
-                  ${escapeHtml(
-                    minutesToTime(end)
-                  )}
-                </span>
-
-                <span>
-                  ${escapeHtml(
-                    course
-                      ? course.name
-                      : `${reservation.course}分`
-                  )}
-                </span>
-
-              </button>
-
-            </div>
-
-          `;
-
-          return;
-
-        }
-
-
-        /*
-          予約中なら不可
-        */
-
-        if(
-          isInsideExistingReservation(
-            girl,
-            minutes
-          )
-        ){
-
-          html += `
-
-            <div class="slot">
-
-              <div class="slot-unavailable">
-                予約不可
-              </div>
-
-            </div>
-
-          `;
-
-          return;
-
-        }
-
-
-        /*
-          ここで
-          10:50が予約可能になる。
-
-          10:00～10:40の場合
-
-          isInsideExistingReservation(10:50)
-          → false
-
-          isGridTimeAvailable(10:50)
-          → true
-
-          → ＋予約
-        */
-
-        if(
-          isGridTimeAvailable(
-            girl,
-            time
-          )
-        ){
-
-          html += `
-
-            <div class="slot">
-
-              <button
-                class="slot-btn"
-                type="button"
-                data-new-girl="${escapeHtml(girl)}"
-                data-new-time="${time}"
-              >
-                ＋予約
-              </button>
-
-            </div>
-
-          `;
-
-        }else{
-
-          html += `
-
-            <div class="slot">
-
-              <div class="slot-unavailable">
-                予約不可
-              </div>
-
-            </div>
-
-          `;
-
-        }
-
-      }
+function clearError(){
+
+  const e =
+    document.getElementById(
+      "reservationError"
     );
 
 
-    html += `
-      </div>
-    `;
+  e.classList.remove("show");
 
-  }
-
-
-  schedule.innerHTML =
-    html;
-
-
-  /*
-    編集ボタン
-  */
-
-  schedule
-    .querySelectorAll(
-      "[data-edit-id]"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            openEditReservation(
-              button.dataset.editId
-            );
-
-          }
-        );
-
-      }
-    );
-
-
-  /*
-    新規予約ボタン
-  */
-
-  schedule
-    .querySelectorAll(
-      "[data-new-girl]"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            openNewReservation(
-              button.dataset.newGirl,
-              button.dataset.newTime
-            );
-
-          }
-        );
-
-      }
-    );
-
-
-  updateInfo();
+  e.textContent = "";
 
 }
 
 
-/* =====================================================
-   開始時刻の予約取得
-===================================================== */
+function showError(message){
 
-function getReservationStartingAt(
+  const e =
+    document.getElementById(
+      "reservationError"
+    );
+
+
+  e.textContent =
+    message;
+
+
+  e.classList.add("show");
+
+}
+
+
+function openNew(
   girl,
   time
 ){
 
-  return reservations.find(
-    reservation =>
-      String(reservation.girl) ===
-      String(girl) &&
-      String(reservation.time) ===
-      String(time)
-  );
-
-}
+  editingId =
+    null;
 
 
-/* =====================================================
-   情報
-===================================================== */
-
-function updateInfo(){
-
-  const count =
-    reservations.length;
-
-
-  const sales =
-    reservations.reduce(
-      (sum,reservation) => {
-
-        const course =
-          getCourseByMinutes(
-            reservation.course
-          );
-
-
-        return sum +
-          Number(
-            course?.price || 0
-          );
-
-      },
-      0
-    );
+  clearError();
 
 
   document.getElementById(
-    "reservationCount"
+    "reservationTitle"
   ).textContent =
-    count;
+    "新しい予約";
 
 
   document.getElementById(
-    "totalSales"
-  ).textContent =
-    formatYen(sales);
+    "customerInput"
+  ).value =
+    "";
+
+
+  fillGirlSelect();
+
+  fillCourseSelect();
+
+
+  document.getElementById(
+    "girlSelect"
+  ).value =
+    girl;
+
+
+  document.getElementById(
+    "timeInput"
+  ).value =
+    minutesToTime(time);
+
+
+  document.getElementById(
+    "reservationBack"
+  ).classList.add("show");
+
+
+  updateHint();
 
 }
 
 
-/* =====================================================
-   予約一覧
-===================================================== */
+function openEdit(id){
 
-function openList(){
-
-  renderReservationList();
-
-  listModal.classList.add(
-    "show"
-  );
-
-}
-
-
-function renderReservationList(){
-
-  const container =
-    document.getElementById(
-      "reservationList"
+  const r =
+    reservations.find(
+      x =>
+        String(x.id)
+        ===
+        String(id)
     );
 
 
-  if(
-    reservations.length === 0
-  ){
-
-    container.innerHTML =
-      `<div class="empty">予約はありません。</div>`;
+  if(!r){
 
     return;
 
   }
 
 
-  const sorted =
-    [...reservations].sort(
-      (a,b) =>
-        timeToMinutes(a.time) -
-        timeToMinutes(b.time)
-    );
+  editingId =
+    r.id;
 
 
-  let html = "";
+  clearError();
 
 
-  sorted.forEach(
-    reservation => {
-
-      const end =
-        getReservationEnd(
-          reservation
-        );
+  document.getElementById(
+    "reservationTitle"
+  ).textContent =
+    "予約を編集";
 
 
-      const course =
-        getCourseByMinutes(
-          reservation.course
-        );
+  document.getElementById(
+    "customerInput"
+  ).value =
+    r.customer || "";
 
 
-      html += `
+  fillGirlSelect();
 
-        <div class="list-item">
-
-          <div class="list-main">
-
-            <div class="list-info">
-
-              <strong>
-                ${escapeHtml(
-                  reservation.customer ||
-                  "名前なし"
-                )}
-              </strong>
-
-              <div>
-                ${escapeHtml(
-                  reservation.girl
-                )}
-              </div>
-
-              <div>
-                ${escapeHtml(
-                  reservation.time
-                )}
-                ～
-                ${escapeHtml(
-                  minutesToTime(end)
-                )}
-              </div>
-
-              <div>
-                ${escapeHtml(
-                  course
-                    ? course.name
-                    : `${reservation.course}分`
-                )}
-
-                ${
-                  course
-                    ? " / " +
-                      formatYen(course.price)
-                    : ""
-                }
-
-              </div>
-
-            </div>
+  fillCourseSelect();
 
 
-            <div class="list-actions">
-
-              <button
-                class="btn blue small"
-                type="button"
-                data-list-edit="${escapeHtml(reservation.id)}"
-              >
-                編集
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }
-  );
+  document.getElementById(
+    "girlSelect"
+  ).value =
+    r.girl;
 
 
-  container.innerHTML =
-    html;
+  document.getElementById(
+    "timeInput"
+  ).value =
+    r.time;
 
 
-  container
-    .querySelectorAll(
-      "[data-list-edit]"
-    )
-    .forEach(
-      button => {
+  document.getElementById(
+    "courseSelect"
+  ).value =
+    r.course;
 
-        button.addEventListener(
-          "click",
-          () => {
 
-            listModal.classList.remove(
-              "show"
-            );
+  document.getElementById(
+    "reservationBack"
+  ).classList.add("show");
 
-            openEditReservation(
-              button.dataset.listEdit
-            );
 
-          }
-        );
-
-      }
-    );
+  updateHint();
 
 }
 
 
-/* =====================================================
-   集計
-===================================================== */
+function closeReservation(){
 
-function openSummary(){
+  document.getElementById(
+    "reservationBack"
+  ).classList.remove("show");
 
-  renderSummary();
 
-  summaryModal.classList.add(
-    "show"
-  );
+  editingId =
+    null;
 
 }
 
 
-function renderSummary(){
+function saveReservation(){
 
-  const container =
+  clearError();
+
+
+  const customer =
     document.getElementById(
-      "summaryContent"
+      "customerInput"
+    ).value.trim()
+    ||
+    "お客様";
+
+
+  const girl =
+    document.getElementById(
+      "girlSelect"
+    ).value;
+
+
+  const time =
+    document.getElementById(
+      "timeInput"
+    ).value;
+
+
+  const courseName =
+    document.getElementById(
+      "courseSelect"
+    ).value;
+
+
+  const course =
+    getCourse(courseName);
+
+
+  const start =
+    timeToMinutes(time);
+
+
+  if(!course){
+
+    showError(
+      "コースを選択してください。"
     );
 
+    return;
 
-  const girlData =
-    girls.map(
-      girl => {
-
-        const list =
-          reservations.filter(
-            reservation =>
-              String(
-                reservation.girl
-              ) ===
-              String(girl)
-          );
+  }
 
 
-        const sales =
-          list.reduce(
-            (sum,reservation) => {
+  if(!Number.isFinite(start)){
 
-              const course =
-                getCourseByMinutes(
-                  reservation.course
-                );
-
-
-              return sum +
-                Number(
-                  course?.price || 0
-                );
-
-            },
-            0
-          );
-
-
-        return {
-          girl,
-          count:list.length,
-          sales
-        };
-
-      }
+    showError(
+      "開始時間を入力してください。"
     );
 
+    return;
 
-  const courseData =
-    courses.map(
-      course => {
-
-        const list =
-          reservations.filter(
-            reservation =>
-              Number(
-                reservation.course
-              ) ===
-              Number(course.minutes)
-          );
+  }
 
 
-        const sales =
-          list.length *
-          Number(course.price || 0);
+  if(
+    start < START_TIME
+    ||
+    start + course.minutes
+      > END_TIME
+  ){
 
-
-        return {
-          course,
-          count:list.length,
-          sales
-        };
-
-      }
+    showError(
+      "営業時間内に収まる時間を選択してください。"
     );
 
+    return;
 
-  const total =
-    reservations.reduce(
-      (sum,reservation) => {
-
-        const course =
-          getCourseByMinutes(
-            reservation.course
-          );
+  }
 
 
-        return sum +
-          Number(
-            course?.price || 0
-          );
+  /*
+    ★最重要
 
-      },
-      0
+    ここで
+    「終了後10分」
+    を判定。
+  */
+
+  if(
+    !isAvailable(
+      girl,
+      start,
+      course.minutes,
+      editingId
+    )
+  ){
+
+    showError(
+
+      "この時間は予約できません。"
+      +
+      "既存予約の終了時刻から10分後以降、"
+      +
+      "かつ他の予約と重ならない時間を選択してください。"
+
     );
 
+    return;
 
-  let html = `
-
-    <h3>全体</h3>
-
-    <table class="summary-table">
-
-      <tr>
-        <th>予約件数</th>
-        <th>売上</th>
-      </tr>
-
-      <tr>
-        <td>
-          ${reservations.length}件
-        </td>
-
-        <td>
-          ${formatYen(total)}
-        </td>
-      </tr>
-
-    </table>
-
-    <br>
-
-    <h3>女の子別</h3>
-
-    <table class="summary-table">
-
-      <tr>
-        <th>女の子</th>
-        <th>件数</th>
-        <th>売上</th>
-        <th>割合</th>
-      </tr>
-
-  `;
+  }
 
 
-  girlData.forEach(
-    data => {
+  const item = {
 
-      const percentage =
-        reservations.length > 0
-          ? data.count /
-            reservations.length *
-            100
-          : 0;
+    id:
+      editingId
+      ||
+      (
+        Date.now()
+        +
+        "_"
+        +
+        Math.random()
+          .toString(36)
+          .slice(2)
+      ),
+
+    customer,
+
+    girl,
+
+    time,
+
+    course:
+      course.name
+
+  };
 
 
-      html += `
+  if(editingId){
 
-        <tr>
+    const index =
+      reservations.findIndex(
+        x =>
+          String(x.id)
+          ===
+          String(editingId)
+      );
 
-          <td>
-            ${escapeHtml(data.girl)}
-          </td>
 
-          <td>
-            ${data.count}
-          </td>
+    if(index >= 0){
 
-          <td>
-            ${formatYen(data.sales)}
-          </td>
-
-          <td>
-            ${percentage.toFixed(1)}%
-          </td>
-
-        </tr>
-
-      `;
+      reservations[index] =
+        item;
 
     }
+
+  }
+
+  else{
+
+    reservations.push(item);
+
+  }
+
+
+  reservations.sort(
+    (a,b) =>
+      timeToMinutes(a.time)
+      -
+      timeToMinutes(b.time)
   );
 
 
-  html += `
+  saveReservations();
 
-    </table>
+  closeReservation();
 
-    <br>
-
-    <h3>コース別</h3>
-
-    <table class="summary-table">
-
-      <tr>
-        <th>コース</th>
-        <th>件数</th>
-        <th>売上</th>
-        <th>割合</th>
-      </tr>
-
-  `;
-
-
-  courseData.forEach(
-    data => {
-
-      const percentage =
-        reservations.length > 0
-          ? data.count /
-            reservations.length *
-            100
-          : 0;
-
-
-      html += `
-
-        <tr>
-
-          <td>
-            ${escapeHtml(
-              data.course.name
-            )}
-          </td>
-
-          <td>
-            ${data.count}
-          </td>
-
-          <td>
-            ${formatYen(data.sales)}
-          </td>
-
-          <td>
-            ${percentage.toFixed(1)}%
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-  );
-
-
-  html += `
-    </table>
-  `;
-
-
-  container.innerHTML =
-    html;
+  render();
 
 }
 
 
-/* =====================================================
+/* =========================================================
    設定
-===================================================== */
+========================================================= */
 
 function openSettings(){
 
   renderSettings();
 
-  settingsModal.classList.add(
-    "show"
-  );
+  document.getElementById(
+    "settingsBack"
+  ).classList.add("show");
+
+}
+
+
+function closeSettings(){
+
+  document.getElementById(
+    "settingsBack"
+  ).classList.remove("show");
 
 }
 
 
 function renderSettings(){
 
-  renderGirlsSettings();
-
-  renderCoursesSettings();
-
-}
-
-
-function renderGirlsSettings(){
-
-  const container =
+  const girls =
     document.getElementById(
       "girlsSettings"
     );
 
 
-  container.innerHTML = "";
+  girls.innerHTML = "";
 
 
-  girls.forEach(
-    (girl,index) => {
+  settings.girls.forEach(
+    (name,index) => {
 
-      const div =
+      const row =
         document.createElement(
           "div"
         );
 
 
-      div.className =
-        "settings-item";
+      row.className =
+        "setting-row";
 
 
-      div.innerHTML = `
+      row.innerHTML =
 
-        <input
-          type="text"
-          value="${escapeHtml(girl)}"
-          data-girl-index="${index}"
-        >
+        `<input
+          data-girl="${index}"
+          value="${escapeHtml(name)}"
+        >`
 
-        <button
-          type="button"
-          class="btn red small"
-          data-delete-girl="${index}"
-        >
+        +
+
+        `<button
+          class="remove"
+          data-rmgirl="${index}">
           削除
-        </button>
-
-      `;
+        </button>`;
 
 
-      container.appendChild(
-        div
-      );
+      girls.appendChild(row);
 
     }
   );
 
 
-  container
+  girls
     .querySelectorAll(
-      "[data-delete-girl]"
+      "[data-rmgirl]"
     )
-    .forEach(
-      button => {
+    .forEach(button => {
 
-        button.addEventListener(
-          "click",
-          () => {
+      button.onclick = () => {
 
-            const index =
-              Number(
-                button.dataset.deleteGirl
-              );
+        if(
+          settings.girls.length <= 1
+        ){
 
+          alert(
+            "女の子は最低1人必要です。"
+          );
 
-            if(girls.length <= 1){
+          return;
 
-              alert(
-                "女の子は最低1人必要です。"
-              );
-
-              return;
-
-            }
+        }
 
 
-            if(
-              !confirm(
-                `${girls[index]}を削除しますか？`
-              )
-            ){
-
-              return;
-
-            }
-
-
-            girls.splice(
-              index,
-              1
-            );
-
-
-            renderSettings();
-
-          }
+        settings.girls.splice(
+          Number(
+            button.dataset.rmgirl
+          ),
+          1
         );
 
-      }
-    );
 
-}
+        renderSettings();
+
+      };
+
+    });
 
 
-function renderCoursesSettings(){
-
-  const container =
+  const courses =
     document.getElementById(
       "coursesSettings"
     );
 
 
-  container.innerHTML = "";
+  courses.innerHTML = "";
 
 
-  courses.forEach(
+  settings.courses.forEach(
     (course,index) => {
 
-      const div =
+      const row =
         document.createElement(
           "div"
         );
 
 
-      div.className =
-        "settings-item";
+      row.className =
+        "setting-row course";
 
 
-      div.innerHTML = `
+      row.innerHTML =
 
-        <input
-          type="text"
+        `<input
+          data-cname="${index}"
           value="${escapeHtml(course.name)}"
           placeholder="コース名"
-          data-course-name="${index}"
-        >
+        >`
 
-        <input
+        +
+
+        `<input
+          data-cmin="${index}"
           type="number"
-          value="${Number(course.minutes)}"
           min="1"
+          value="${course.minutes}"
           placeholder="分"
-          style="max-width:90px;"
-          data-course-minutes="${index}"
-        >
+        >`
 
-        <input
+        +
+
+        `<input
+          data-cprice="${index}"
           type="number"
-          value="${Number(course.price)}"
           min="0"
+          value="${course.price}"
           placeholder="料金"
-          style="max-width:110px;"
-          data-course-price="${index}"
-        >
+        >`
 
-        <button
-          type="button"
-          class="btn red small"
-          data-delete-course="${index}"
-        >
+        +
+
+        `<button
+          class="remove"
+          data-rmcourse="${index}">
           削除
-        </button>
-
-      `;
+        </button>`;
 
 
-      container.appendChild(
-        div
-      );
+      courses.appendChild(row);
 
     }
   );
 
 
-  container
+  courses
     .querySelectorAll(
-      "[data-delete-course]"
+      "[data-rmcourse]"
     )
-    .forEach(
-      button => {
+    .forEach(button => {
 
-        button.addEventListener(
-          "click",
-          () => {
+      button.onclick = () => {
 
-            const index =
-              Number(
-                button.dataset.deleteCourse
-              );
+        if(
+          settings.courses.length <= 1
+        ){
 
+          alert(
+            "コースは最低1つ必要です。"
+          );
 
-            if(courses.length <= 1){
+          return;
 
-              alert(
-                "コースは最低1つ必要です。"
-              );
-
-              return;
-
-            }
+        }
 
 
-            courses.splice(
-              index,
-              1
-            );
-
-
-            renderSettings();
-
-          }
+        settings.courses.splice(
+          Number(
+            button.dataset.rmcourse
+          ),
+          1
         );
 
-      }
-    );
+
+        renderSettings();
+
+      };
+
+    });
 
 }
 
 
-/* =====================================================
-   設定保存
-===================================================== */
-
 function saveSettings(){
 
-  const girlInputs =
-    document.querySelectorAll(
-      "[data-girl-index]"
+  const girls =
+    [...document.querySelectorAll(
+      "[data-girl]"
+    )]
+
+      .map(
+        x =>
+          x.value.trim()
+      )
+
+      .filter(Boolean);
+
+
+  const courses =
+    settings.courses.map(
+      (_,index) => ({
+
+        name:
+          document.querySelector(
+            `[data-cname="${index}"]`
+          ).value.trim(),
+
+        minutes:
+          Number(
+            document.querySelector(
+              `[data-cmin="${index}"]`
+            ).value
+          ),
+
+        price:
+          Number(
+            document.querySelector(
+              `[data-cprice="${index}"]`
+            ).value
+          )
+
+      })
     );
 
 
-  const newGirls = [];
-
-
-  girlInputs.forEach(
-    input => {
-
-      const value =
-        input.value.trim();
-
-      if(value){
-        newGirls.push(value);
-      }
-
-    }
-  );
-
-
-  if(
-    newGirls.length === 0
-  ){
+  if(!girls.length){
 
     alert(
       "女の子を1人以上設定してください。"
@@ -3118,289 +2202,19 @@ function saveSettings(){
   }
 
 
-  const names =
-    document.querySelectorAll(
-      "[data-course-name]"
-    );
-
-  const minutesInputs =
-    document.querySelectorAll(
-      "[data-course-minutes]"
-    );
-
-  const priceInputs =
-    document.querySelectorAll(
-      "[data-course-price]"
-    );
-
-
-  const newCourses = [];
-
-
-  for(
-    let i = 0;
-    i < names.length;
-    i++
-  ){
-
-    const name =
-      names[i].value.trim();
-
-    const minutes =
-      Number(
-        minutesInputs[i].value
-      );
-
-    const price =
-      Number(
-        priceInputs[i].value
-      );
-
-
-    if(!name){
-
-      alert(
-        "コース名を入力してください。"
-      );
-
-      return;
-
-    }
-
-
-    if(
-      !Number.isFinite(minutes) ||
-      minutes <= 0
-    ){
-
-      alert(
-        "コース時間を正しく入力してください。"
-      );
-
-      return;
-
-    }
-
-
-    if(
-      !Number.isFinite(price) ||
-      price < 0
-    ){
-
-      alert(
-        "料金を正しく入力してください。"
-      );
-
-      return;
-
-    }
-
-
-    newCourses.push({
-
-      name,
-
-      minutes,
-
-      price
-
-    });
-
-  }
-
-
-  if(
-    newCourses.length === 0
-  ){
-
-    alert(
-      "コースを1つ以上設定してください。"
-    );
-
-    return;
-
-  }
-
-
-  const minutesSet =
-    new Set();
-
-
-  for(
-    const course of newCourses
-  ){
-
-    if(
-      minutesSet.has(
-        course.minutes
-      )
-    ){
-
-      alert(
-        "同じ時間のコースが重複しています。"
-      );
-
-      return;
-
-    }
-
-
-    minutesSet.add(
-      course.minutes
-    );
-
-  }
-
-
-  girls =
-    newGirls;
-
-  courses =
-    newCourses;
-
-
-  saveGirls();
-
-  saveCourses();
-
-
-  populateGirlSelect();
-
-  populateCourseSelect();
-
-
-  settingsModal.classList.remove(
-    "show"
-  );
-
-
-  render();
-
-}
-
-
-/* =====================================================
-   女の子追加
-===================================================== */
-
-function addGirl(){
-
-  const name =
-    prompt(
-      "女の子の名前を入力してください。"
-    );
-
-
-  if(name === null){
-    return;
-  }
-
-
-  const value =
-    name.trim();
-
-
-  if(!value){
-    return;
-  }
-
-
-  if(
-    girls.includes(value)
-  ){
-
-    alert(
-      "同じ名前がすでにあります。"
-    );
-
-    return;
-
-  }
-
-
-  girls.push(value);
-
-  renderSettings();
-
-}
-
-
-/* =====================================================
-   コース追加
-===================================================== */
-
-function addCourse(){
-
-  const name =
-    prompt(
-      "コース名を入力してください。",
-      "新コース"
-    );
-
-
-  if(name === null){
-    return;
-  }
-
-
-  const minutesText =
-    prompt(
-      "コース時間（分）を入力してください。",
-      "40"
-    );
-
-
-  if(minutesText === null){
-    return;
-  }
-
-
-  const priceText =
-    prompt(
-      "料金を入力してください。",
-      "8000"
-    );
-
-
-  if(priceText === null){
-    return;
-  }
-
-
-  const minutes =
-    Number(minutesText);
-
-  const price =
-    Number(priceText);
-
-
-  if(
-    !name.trim() ||
-    !Number.isFinite(minutes) ||
-    minutes <= 0 ||
-    !Number.isFinite(price) ||
-    price < 0
-  ){
-
-    alert(
-      "入力内容が正しくありません。"
-    );
-
-    return;
-
-  }
-
-
   if(
     courses.some(
-      course =>
-        Number(course.minutes) ===
-        Number(minutes)
+      c =>
+        !c.name
+        ||
+        !Number.isFinite(c.minutes)
+        ||
+        c.minutes <= 0
     )
   ){
 
     alert(
-      "同じ時間のコースがすでにあります。"
+      "コース名と分数を正しく入力してください。"
     );
 
     return;
@@ -3408,400 +2222,326 @@ function addCourse(){
   }
 
 
-  courses.push({
+  settings =
+    normalizeSettings({
+      girls,
+      courses
+    });
 
-    name:name.trim(),
 
-    minutes,
+  saveSettingsStorage();
 
-    price
-
-  });
-
-
-  renderSettings();
-
-}
-
-
-/* =====================================================
-   日付移動
-===================================================== */
-
-function moveDate(days){
-
-  const date =
-    new Date(
-      currentDate +
-      "T00:00:00"
-    );
-
-
-  date.setDate(
-    date.getDate() + days
-  );
-
-
-  const year =
-    date.getFullYear();
-
-  const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2,"0");
-
-  const day =
-    String(
-      date.getDate()
-    ).padStart(2,"0");
-
-
-  changeDate(
-    `${year}-${month}-${day}`
-  );
-
-}
-
-
-/* =====================================================
-   フォームリアルタイムチェック
-===================================================== */
-
-function checkCurrentForm(){
-
-  if(
-    !girlInput.value ||
-    !timeInput.value ||
-    !courseInput.value
-  ){
-
-    clearReservationError();
-
-    return;
-
-  }
-
-
-  const available =
-    isReservationTimeAvailable(
-      girlInput.value,
-      timeInput.value,
-      Number(courseInput.value),
-      editingReservationId
-    );
-
-
-  if(!available){
-
-    const conflict =
-      findConflictReservation(
-        girlInput.value,
-        timeInput.value,
-        Number(courseInput.value),
-        editingReservationId
-      );
-
-
-    if(conflict){
-
-      const oldEnd =
-        getReservationEnd(
-          conflict
-        );
-
-      const next =
-        oldEnd + GAP;
-
-
-      showReservationError(
-        `この時間は予約できません。` +
-        `${conflict.time}～${minutesToTime(oldEnd)}の予約があります。` +
-        `${minutesToTime(next)}以降にしてください。`
-      );
-
-    }else{
-
-      showReservationError(
-        "この時間は予約できません。"
-      );
-
-    }
-
-  }else{
-
-    clearReservationError();
-
-  }
-
-}
-
-
-/* =====================================================
-   イベント
-===================================================== */
-
-document
-  .getElementById("prevDay")
-  .addEventListener(
-    "click",
-    () => moveDate(-1)
-  );
-
-
-document
-  .getElementById("nextDay")
-  .addEventListener(
-    "click",
-    () => moveDate(1)
-  );
-
-
-dateInput.addEventListener(
-  "change",
-  () => {
-
-    if(dateInput.value){
-
-      changeDate(
-        dateInput.value
-      );
-
-    }
-
-  }
-);
-
-
-document
-  .getElementById("newReservationBtn")
-  .addEventListener(
-    "click",
-    () => openNewReservation()
-  );
-
-
-document
-  .getElementById("saveReservationBtn")
-  .addEventListener(
-    "click",
-    saveReservation
-  );
-
-
-document
-  .getElementById("cancelReservationBtn")
-  .addEventListener(
-    "click",
-    closeReservationModal
-  );
-
-
-deleteReservationBtn
-  .addEventListener(
-    "click",
-    deleteCurrentReservation
-  );
-
-
-document
-  .getElementById("listBtn")
-  .addEventListener(
-    "click",
-    openList
-  );
-
-
-document
-  .getElementById("closeListBtn")
-  .addEventListener(
-    "click",
-    () =>
-      listModal.classList.remove(
-        "show"
-      )
-  );
-
-
-document
-  .getElementById("summaryBtn")
-  .addEventListener(
-    "click",
-    openSummary
-  );
-
-
-document
-  .getElementById("closeSummaryBtn")
-  .addEventListener(
-    "click",
-    () =>
-      summaryModal.classList.remove(
-        "show"
-      )
-  );
-
-
-document
-  .getElementById("settingsBtn")
-  .addEventListener(
-    "click",
-    openSettings
-  );
-
-
-document
-  .getElementById("closeSettingsBtn")
-  .addEventListener(
-    "click",
-    () =>
-      settingsModal.classList.remove(
-        "show"
-      )
-  );
-
-
-document
-  .getElementById("saveSettingsBtn")
-  .addEventListener(
-    "click",
-    saveSettings
-  );
-
-
-document
-  .getElementById("addGirlBtn")
-  .addEventListener(
-    "click",
-    addGirl
-  );
-
-
-document
-  .getElementById("addCourseBtn")
-  .addEventListener(
-    "click",
-    addCourse
-  );
-
-
-girlInput.addEventListener(
-  "change",
-  checkCurrentForm
-);
-
-
-timeInput.addEventListener(
-  "input",
-  checkCurrentForm
-);
-
-
-courseInput.addEventListener(
-  "change",
-  checkCurrentForm
-);
-
-
-/* =====================================================
-   モーダル外クリック
-===================================================== */
-
-reservationModal.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target ===
-      reservationModal
-    ){
-
-      closeReservationModal();
-
-    }
-
-  }
-);
-
-
-listModal.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target ===
-      listModal
-    ){
-
-      listModal.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-);
-
-
-summaryModal.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target ===
-      summaryModal
-    ){
-
-      summaryModal.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-);
-
-
-settingsModal.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target ===
-      settingsModal
-    ){
-
-      settingsModal.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   初期化
-===================================================== */
-
-(function init(){
-
-  currentDate =
-    getTodayString();
-
-  dateInput.value =
-    currentDate;
-
-  reservations =
-    loadReservations();
-
-  populateGirlSelect();
-
-  populateCourseSelect();
+  closeSettings();
 
   render();
 
-})();
+}
+
+
+/* =========================================================
+   集計
+========================================================= */
+
+function openSummary(){
+
+  loadReservations();
+
+
+  const totals = {};
+
+  let total = 0;
+
+
+  for(
+    const r
+    of reservations
+  ){
+
+    const course =
+      getCourse(r.course);
+
+
+    const price =
+      course
+        ? course.price
+        : 0;
+
+
+    total += price;
+
+
+    if(!totals[r.girl]){
+
+      totals[r.girl] = {
+        count:0,
+        total:0
+      };
+
+    }
+
+
+    totals[r.girl].count++;
+
+    totals[r.girl].total +=
+      price;
+
+  }
+
+
+  let html = "";
+
+
+  for(
+    const girl
+    of settings.girls
+  ){
+
+    const x =
+      totals[girl]
+      ||
+      {
+        count:0,
+        total:0
+      };
+
+
+    html +=
+
+      `<div class="summary-item">
+
+        <strong>
+          ${escapeHtml(girl)}
+        </strong>
+
+        <br>
+
+        ${x.count}件
+       　
+        ${yen(x.total)}
+
+      </div>`;
+
+  }
+
+
+  html +=
+
+    `<div class="total">
+
+      合計
+      ${reservations.length}件
+      ／
+      ${yen(total)}
+
+    </div>`;
+
+
+  document.getElementById(
+    "summaryContent"
+  ).innerHTML =
+    html;
+
+
+  document.getElementById(
+    "summaryBack"
+  ).classList.add("show");
+
+}
+
+
+/* =========================================================
+   ボタン
+========================================================= */
+
+document.getElementById(
+  "prevDay"
+).onclick = () => {
+
+  currentDate.setDate(
+    currentDate.getDate() - 1
+  );
+
+  render();
+
+};
+
+
+document.getElementById(
+  "nextDay"
+).onclick = () => {
+
+  currentDate.setDate(
+    currentDate.getDate() + 1
+  );
+
+  render();
+
+};
+
+
+document.getElementById(
+  "settingsBtn"
+).onclick =
+  openSettings;
+
+
+document.getElementById(
+  "summaryBtn"
+).onclick =
+  openSummary;
+
+
+document.getElementById(
+  "cancelReservation"
+).onclick =
+  closeReservation;
+
+
+document.getElementById(
+  "saveReservation"
+).onclick =
+  saveReservation;
+
+
+document.getElementById(
+  "girlSelect"
+).onchange =
+  updateHint;
+
+
+document.getElementById(
+  "timeInput"
+).oninput =
+  updateHint;
+
+
+document.getElementById(
+  "courseSelect"
+).onchange =
+  updateHint;
+
+
+document.getElementById(
+  "cancelSettings"
+).onclick =
+  closeSettings;
+
+
+document.getElementById(
+  "closeSummary"
+).onclick = () => {
+
+  document.getElementById(
+    "summaryBack"
+  ).classList.remove("show");
+
+};
+
+
+document.getElementById(
+  "addGirl"
+).onclick = () => {
+
+  settings.girls.push(
+    "新しい女の子"
+  );
+
+  renderSettings();
+
+};
+
+
+document.getElementById(
+  "addCourse"
+).onclick = () => {
+
+  settings.courses.push({
+
+    name:"新しいコース",
+
+    minutes:40,
+
+    price:10000
+
+  });
+
+  renderSettings();
+
+};
+
+
+/* =========================================================
+   モーダル外側クリック
+========================================================= */
+
+for(
+  const id
+  of [
+    "reservationBack",
+    "settingsBack",
+    "summaryBack"
+  ]
+){
+
+  document.getElementById(
+    id
+  ).onclick = e => {
+
+    if(
+      e.target !==
+      e.currentTarget
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      id ===
+      "reservationBack"
+    ){
+
+      closeReservation();
+
+    }
+
+
+    if(
+      id ===
+      "settingsBack"
+    ){
+
+      closeSettings();
+
+    }
+
+
+    if(
+      id ===
+      "summaryBack"
+    ){
+
+      document.getElementById(
+        "summaryBack"
+      ).classList.remove(
+        "show"
+      );
+
+    }
+
+  };
+
+}
+
+
+/* =========================================================
+   初期化
+========================================================= */
+
+saveSettingsStorage();
+
+render();
 
 </script>
 
