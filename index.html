@@ -4,674 +4,228 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>予約表</title>
-
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
-  background:#f5f5f7;
-  color:#111;
-}
-header{
-  position:sticky;
-  top:0;
-  background:white;
-  padding:12px;
-  z-index:5;
-  border-bottom:1px solid #ddd;
-}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;background:#f5f6f8;color:#222}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #ddd;padding:10px}
 h1{font-size:20px;margin:0 0 8px}
-.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.bar input{
-  font-size:16px;
-  padding:7px;
-  border:1px solid #ccc;
-  border-radius:8px;
-}
-.bar button{
-  padding:8px 12px;
-  border:0;
-  border-radius:8px;
-  background:#111;
-  color:white;
-}
-.wrap{padding:10px}
-.grid{
-  display:grid;
-  grid-template-columns:58px repeat(var(--girls),1fr);
-  background:white;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid #ddd;
-}
-.cell{
-  min-height:48px;
-  border-right:1px solid #ddd;
-  border-bottom:1px solid #ddd;
-  padding:4px;
-}
-.head{
-  position:sticky;
-  top:74px;
-  background:#222;
-  color:white;
-  text-align:center;
-  font-weight:700;
-  z-index:3;
-}
-.time{
-  text-align:center;
-  font-size:12px;
-  color:#555;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.slot{
-  width:100%;
-  height:100%;
-  min-height:40px;
-  border:0;
-  border-radius:7px;
-  background:#e8f7e8;
-  color:#197329;
-  font-weight:600;
-  font-size:12px;
-}
-.slot.booked{
-  background:#ffd9d9;
-  color:#a40000;
-}
-.slot.buffer{
-  background:#fff1cc;
-  color:#8a5a00;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#0008;
-  z-index:20;
-  align-items:flex-end;
-  justify-content:center;
-}
-.box{
-  background:white;
-  width:100%;
-  max-width:520px;
-  max-height:90vh;
-  overflow:auto;
-  border-radius:18px 18px 0 0;
-  padding:18px;
-}
-.box h2{margin:0 0 10px;font-size:19px}
-.courses{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:6px;
-}
-.courses button{
-  padding:12px 2px;
-  border:1px solid #ccc;
-  background:white;
-  border-radius:8px;
-  font-weight:700;
-}
-.courses button.sel{
-  background:#111;
-  color:white;
-}
-input.name,
-input.setting{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  font-size:16px;
-  border:1px solid #ccc;
-  border-radius:8px;
-}
-.actions{
-  display:flex;
-  gap:8px;
-}
-.actions button{
-  flex:1;
-  padding:12px;
-  border:0;
-  border-radius:9px;
-  font-weight:700;
-}
-.ok{background:#111;color:white}
-.cancel{background:#eee}
-.del{
-  background:#f44;
-  color:white;
-  margin-top:8px;
-  width:100%;
-  padding:11px;
-  border:0;
-  border-radius:9px;
-}
-.small{
-  font-size:12px;
-  color:#666;
-  margin-top:8px;
-}
-.setting-row{
-  display:flex;
-  gap:6px;
-  align-items:center;
-}
-.setting-row input{flex:1}
-.setting-row button{
-  padding:10px;
-  border:0;
-  border-radius:8px;
-  background:#f44;
-  color:white;
-}
-.setting-section{
-  margin-top:18px;
-  padding-top:12px;
-  border-top:1px solid #ddd;
-}
-.summary{
-  background:white;
-  margin:10px;
-  padding:15px;
-  border-radius:12px;
-  border:1px solid #ddd;
-}
-.summary h2{margin-top:0}
-.total{
-  font-size:18px;
-  font-weight:700;
-  margin-top:12px;
-}
-.setting-main{
-  background:#111;
-  color:white;
-  border:0;
-  border-radius:8px;
-  padding:10px 14px;
-}
+.bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+button,input,select{font:inherit}
+button{border:1px solid #ccc;background:#fff;border-radius:8px;padding:8px 12px}
+button.primary{background:#222;color:#fff;border-color:#222}
+input,select{border:1px solid #ccc;border-radius:7px;padding:8px;background:#fff}
+main{padding:10px;max-width:1100px;margin:auto}
+.card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px;margin-bottom:10px}
+.grid{overflow:auto}
+.schedule{display:grid;grid-template-columns:72px repeat(var(--girls),minmax(115px,1fr));min-width:400px}
+.cell{border-right:1px solid #ddd;border-bottom:1px solid #ddd;min-height:52px;padding:5px;font-size:12px}
+.head{font-weight:700;background:#fafafa}
+.time{background:#fafafa;text-align:center}
+.slot{width:100%;min-height:42px;border:0;background:#f8f8f8;padding:4px;text-align:left}
+.slot.reserved{background:#e8f1ff}
+.slot small{display:block;color:#555}
+.modal{position:fixed;inset:0;background:#0006;display:none;align-items:flex-end;z-index:20}
+.modal.show{display:flex}
+.sheet{background:#fff;width:100%;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px}
+.row{display:flex;gap:8px;align-items:center;margin:7px 0}
+.row>*{flex:1}
+.row label{flex:0 0 105px}
+.danger{color:#b00020}
+.muted{color:#666;font-size:13px}
+.course{border:1px solid #ddd;border-radius:10px;padding:10px;margin:8px 0}
+.course h3{margin:0 0 8px;font-size:16px}
+.ratio{display:flex;align-items:center;gap:5px}
+.ratio input{width:70px}
+table{width:100%;border-collapse:collapse}
+th,td{border-bottom:1px solid #ddd;padding:7px;text-align:left;font-size:13px}
+.notice{padding:8px;background:#fff7d6;border:1px solid #eadb8b;border-radius:8px;font-size:13px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>予約表</h1>
-
-  <div class="bar">
-    <input id="date" type="date">
-    <button onclick="today()">今日</button>
-    <button onclick="openSettings()">⚙️ 設定</button>
-  </div>
+<h1>予約表</h1>
+<div class="bar">
+<input id="date" type="date">
+<button onclick="today()">今日</button>
+<button onclick="openSettings()">設定</button>
+<button onclick="openSummary()">集計</button>
+</div>
 </header>
 
-<div class="wrap">
-  <div id="grid" class="grid"></div>
+<main>
+<div class="card">
+<div class="muted">
+予約枠をタップすると予約できます。<br>
+コースごとに女の子・お店の取り分を設定できます。
+</div>
 </div>
 
-<div id="summary" class="summary"></div>
+<div class="card grid">
+<div id="schedule"></div>
+</div>
+</main>
 
 <!-- 予約画面 -->
-<div id="modal" class="modal">
-  <div class="box">
+<div id="reserveModal" class="modal" onclick="if(event.target===this)closeModal('reserveModal')">
+<div class="sheet">
 
-    <h2 id="mtitle">予約</h2>
+<h2 id="reserveTitle">予約</h2>
 
-    <div class="small" id="mwhen"></div>
-
-    <label>開始時間</label>
-    <input id="startInput" type="time" step="60">
-
-    <div class="small">
-      ※ 13:01、13:07など1分単位で入力できます
-    </div>
-
-    <div style="margin-top:12px">コース</div>
-
-    <div class="courses">
-      <button data-min="40">40分</button>
-      <button data-min="60">60分</button>
-      <button data-min="90">90分</button>
-      <button data-min="100">100分</button>
-      <button data-min="120">120分</button>
-    </div>
-
-    <input id="name" class="name" placeholder="お客様名（空欄でもOK）">
-
-    <div class="actions">
-      <button class="cancel" onclick="closeModal()">キャンセル</button>
-      <button class="ok" onclick="save()">予約する</button>
-    </div>
-
-    <button id="del" class="del" style="display:none" onclick="removeBooking()">
-      この予約を削除
-    </button>
-
-  </div>
+<div class="row">
+<label>時間</label>
+<input id="rTime" type="time" step="60">
 </div>
 
-<!-- 設定画面 -->
-<div id="settingsModal" class="modal">
-  <div class="box">
+<div class="row">
+<label>女の子</label>
+<select id="rGirl"></select>
+</div>
 
-    <h2>⚙️ 設定</h2>
+<div class="row">
+<label>コース</label>
+<select id="rCourse"></select>
+</div>
 
-    <div class="setting-section">
-      <h3>女の子設定</h3>
+<div id="rInfo" class="notice"></div>
 
-      <div id="girlSettings"></div>
+<div class="row">
+<label>お客様名</label>
+<input id="rName" placeholder="任意">
+</div>
 
-      <button onclick="addGirl()" style="margin-top:8px;padding:10px;border:0;border-radius:8px">
-        ＋ 女の子を追加
-      </button>
-    </div>
+<div class="row">
+<button class="primary" onclick="saveReservation()">保存</button>
+<button onclick="closeModal('reserveModal')">閉じる</button>
+</div>
 
-    <div class="setting-section">
-      <h3>コース料金</h3>
+<button id="deleteBtn" class="danger" onclick="deleteReservation()">
+この予約を削除
+</button>
 
-      <label>40分</label>
-      <input class="setting" id="price40" type="number">
+</div>
+</div>
 
-      <label>60分</label>
-      <input class="setting" id="price60" type="number">
+<!-- 設定 -->
+<div id="settingsModal" class="modal" onclick="if(event.target===this)closeModal('settingsModal')">
+<div class="sheet">
 
-      <label>90分</label>
-      <input class="setting" id="price90" type="number">
+<h2>設定</h2>
 
-      <label>100分</label>
-      <input class="setting" id="price100" type="number">
+<h3>女の子</h3>
+<div id="girlsBox"></div>
 
-      <label>120分</label>
-      <input class="setting" id="price120" type="number">
-    </div>
+<div class="row">
+<input id="newGirl" placeholder="名前">
+<button onclick="addGirl()">追加</button>
+</div>
 
-    <div class="setting-section">
-      <h3>取り分設定</h3>
+<h3>コース設定</h3>
 
-      <label>女の子の割合（%）</label>
-      <input class="setting" id="girlRate" type="number" min="0" max="100">
+<div id="coursesBox"></div>
 
-      <div class="small">
-        お店の割合は自動的に100%−女の子割合になります。
-      </div>
-    </div>
+<div class="row">
+<button class="primary" onclick="saveSettings()">設定を保存</button>
+<button onclick="closeModal('settingsModal')">閉じる</button>
+</div>
 
-    <div class="actions" style="margin-top:18px">
-      <button class="cancel" onclick="closeSettings()">閉じる</button>
-      <button class="ok" onclick="saveSettings()">設定を保存</button>
-    </div>
+</div>
+</div>
 
-  </div>
+<!-- 集計 -->
+<div id="summaryModal" class="modal" onclick="if(event.target===this)closeModal('summaryModal')">
+<div class="sheet">
+
+<h2>日別集計</h2>
+
+<div id="summary"></div>
+
+<div class="row">
+<button onclick="closeModal('summaryModal')">閉じる</button>
+</div>
+
+</div>
 </div>
 
 <script>
 
-let settings =
-JSON.parse(localStorage.getItem("shop_settings") || "null")
-|| {
-  girls:["ことねさん","ナヨンさん"],
-  price40:0,
-  price60:0,
-  price90:0,
-  price100:0,
-  price120:0,
-  girlRate:50
+const courseMinutes=[40,60,90,100,120];
+
+const defaultSettings={
+ girls:["ことねさん","ナヨンさん"],
+
+ courses:{
+  40:{price:0,girl:6,shop:4},
+  60:{price:0,girl:6,shop:4},
+  90:{price:0,girl:7,shop:3},
+  100:{price:0,girl:7,shop:3},
+  120:{price:0,girl:6,shop:4}
+ }
 };
 
-let data =
-JSON.parse(localStorage.getItem("shop_reservations") || "{}");
+let settings=loadSettings();
+let selectedId=null;
 
-let current=null;
-let selected=40;
+function loadSettings(){
 
-const start=13*60;
-const end=24*60;
-const step=1;
+ try{
 
-const dateEl=document.getElementById("date");
-
-dateEl.value=new Date().toISOString().slice(0,10);
-dateEl.onchange=render;
-
-
-/* コース選択 */
-
-document.querySelectorAll(".courses button").forEach(b=>{
-  b.onclick=()=>{
-    selected=+b.dataset.min;
-
-    document.querySelectorAll(".courses button")
-    .forEach(x=>x.classList.remove("sel"));
-
-    b.classList.add("sel");
-  };
-});
-
-
-/* 基本処理 */
-
-function key(){
-  return dateEl.value;
-}
-
-function store(){
-  localStorage.setItem(
-    "shop_reservations",
-    JSON.stringify(data)
-  );
-}
-
-function storeSettings(){
-  localStorage.setItem(
-    "shop_settings",
-    JSON.stringify(settings)
-  );
-}
-
-function fmt(m){
-  return String(Math.floor(m/60)).padStart(2,"0")
-  +":"
-  +String(m%60).padStart(2,"0");
-}
-
-function timeToMin(t){
-  const [h,m]=t.split(":").map(Number);
-  return h*60+m;
-}
-
-function bookings(){
-  return data[key()] || [];
-}
-
-
-/* 料金 */
-
-function getPrice(course){
-  return Number(settings["price"+course]) || 0;
-}
-
-
-/* 重複チェック */
-
-function overlap(g,s,e,ignore=-1){
-
-  return bookings().some((b,i)=>{
-
-    if(i===ignore) return false;
-    if(b.g!==g) return false;
-
-    return s < b.end+10 &&
-           e+10 > b.start;
-
-  });
-
-}
-
-
-/* 予約表 */
-
-function render(){
-
-  const grid=document.getElementById("grid");
-
-  grid.innerHTML="";
-
-  grid.style.setProperty(
-    "--girls",
-    settings.girls.length
+  const s=JSON.parse(
+   localStorage.getItem("shop_settings")||"null"
   );
 
-  let h=document.createElement("div");
-
-  h.className="cell head";
-  h.textContent="時間";
-
-  grid.append(h);
-
-  settings.girls.forEach(g=>{
-
-    let x=document.createElement("div");
-
-    x.className="cell head";
-    x.textContent=g;
-
-    grid.append(x);
-
-  });
-
-
-  /*
-    1分単位で予約できるようにする。
-    表示自体は10分ごとにして、
-    予約が入っている時間帯は自動表示。
-  */
-
-  for(let t=start;t<end;t+=10){
-
-    let tm=document.createElement("div");
-
-    tm.className="cell time";
-    tm.textContent=fmt(t);
-
-    grid.append(tm);
-
-
-    settings.girls.forEach(g=>{
-
-      let c=document.createElement("div");
-
-      c.className="cell";
-
-      let b=bookings().find(x=>
-        x.g===g &&
-        t>=x.start &&
-        t<x.end+10
-      );
-
-      let btn=document.createElement("button");
-
-      btn.className="slot";
-
-
-      if(b){
-
-        btn.classList.add(
-          t>=b.end ? "buffer" : "booked"
-        );
-
-        if(t===b.start){
-
-          btn.textContent =
-          `${b.name||"予約"} ${b.min}分`;
-
-        }else{
-
-          btn.textContent =
-          t>=b.end ? "10分休憩" : "予約中";
-
-        }
-
-        btn.onclick=()=>{
-          openModal(g,t,b);
-        };
-
-      }else{
-
-        btn.textContent="空き";
-
-        btn.onclick=()=>{
-          openModal(g,t,null);
-        };
-
-      }
-
-      c.append(btn);
-      grid.append(c);
-
-    });
-
+  if(s && s.courses){
+   return normalizeSettings(s);
   }
 
-  renderSummary();
+  if(s){
+
+   const n={
+    girls:s.girls||defaultSettings.girls,
+    courses:{}
+   };
+
+   courseMinutes.forEach(m=>{
+
+    n.courses[m]={
+     price:Number(s["price"+m]||0),
+     girl:Number(s.girlRate||50),
+     shop:100-Number(s.girlRate||50)
+    };
+
+   });
+
+   return n;
+  }
+
+ }catch(e){}
+
+ return JSON.parse(JSON.stringify(defaultSettings));
 }
 
+function normalizeSettings(s){
 
-/* 予約画面 */
+ const n={
+  girls:Array.isArray(s.girls)&&s.girls.length
+   ?s.girls
+   :defaultSettings.girls,
+  courses:{}
+ };
 
-function openModal(g,t,b){
+ courseMinutes.forEach(m=>{
 
-  current={g,t,b};
+  const c=s.courses[m]||defaultSettings.courses[m];
 
-  selected=b ? b.min : 40;
-
-  document.getElementById("mtitle").textContent =
-    b ? "予約を編集" : "新規予約";
-
-  document.getElementById("mwhen").textContent =
-    g+"　"+fmt(t)+"〜";
-
-  document.getElementById("startInput").value =
-    fmt(b ? b.start : t);
-
-  document.getElementById("name").value =
-    b ? b.name : "";
-
-  document.querySelectorAll(".courses button")
-  .forEach(x=>{
-    x.classList.toggle(
-      "sel",
-      +x.dataset.min===selected
-    );
-  });
-
-  document.getElementById("del").style.display =
-    b ? "block" : "none";
-
-  document.getElementById("modal").style.display="flex";
-}
-
-
-function closeModal(){
-
-  document.getElementById("modal").style.display="none";
-
-  current=null;
-}
-
-
-/* 予約保存 */
-
-function save(){
-
-  let {g,b}=current;
-
-  const time=
-    document.getElementById("startInput").value;
-
-  if(!time){
-
-    alert("開始時間を入力してください");
-    return;
-
-  }
-
-  const t=timeToMin(time);
-
-  const e=t+selected;
-
-  if(t<start){
-
-    alert("13:00以降で入力してください");
-    return;
-
-  }
-
-  if(e>24*60){
-
-    alert("24:00を超える予約は入れられません");
-    return;
-
-  }
-
-  let arr=bookings();
-
-  let idx=b ? arr.indexOf(b) : -1;
-
-  if(overlap(g,t,e,idx)){
-
-    alert(
-      "この時間は他の予約（10分休憩含む）と重なります"
-    );
-
-    return;
-
-  }
-
-  const booking={
-
-    g:g,
-
-    start:t,
-
-    end:e,
-
-    min:selected,
-
-    name:
-      document.getElementById("name").value.trim()
-
+  n.courses[m]={
+   price:Number(c.price)||0,
+   girl:Number(c.girl)||0,
+   shop:Number(c.shop)||0
   };
 
-  if(idx>=0){
+ });
 
-    arr[idx]=booking;
-
-  }else{
-
-    arr.push(booking);
-
-  }
-
-  data[key()]=arr;
-
-  store();
-
-  closeModal();
-
-  render();
-
-}
-
-
-/* 削除 */
-
-function removeBooking(){
-
-  let arr=bookings();
-
-  let idx=arr.indexOf(current.b);
-
-  if(idx>=0){
-
-    arr.splice(idx,1);
-
-  }
-
-  data[key()]=arr;
-
-  store();
-
-  closeModal();
-
-  render();
-
+ return n;
 }
 
 
@@ -679,242 +233,772 @@ function removeBooking(){
 
 function openSettings(){
 
-  renderGirlSettings();
+ document.getElementById("girlsBox").innerHTML=
+ settings.girls.map((g,i)=>`
 
-  document.getElementById("price40").value=settings.price40;
-  document.getElementById("price60").value=settings.price60;
-  document.getElementById("price90").value=settings.price90;
-  document.getElementById("price100").value=settings.price100;
-  document.getElementById("price120").value=settings.price120;
-  document.getElementById("girlRate").value=settings.girlRate;
+ <div class="row">
 
-  document.getElementById("settingsModal").style.display="flex";
+ <input class="girlName" value="${esc(g)}">
+
+ <button onclick="removeGirl(${i})">
+ 削除
+ </button>
+
+ </div>
+
+ `).join("");
+
+
+ document.getElementById("coursesBox").innerHTML=
+ courseMinutes.map(m=>{
+
+  const c=settings.courses[m];
+
+  return `
+
+  <div class="course">
+
+  <h3>${m}分</h3>
+
+  <div class="row">
+
+  <label>コース料金</label>
+
+  <input
+   id="p${m}"
+   type="number"
+   min="0"
+   value="${c.price}"
+  >
+
+  <span>円</span>
+
+  </div>
+
+
+  <div class="row">
+
+  <label>取り分</label>
+
+  <div class="ratio">
+
+  <input
+   id="g${m}"
+   type="number"
+   min="0"
+   value="${c.girl}"
+  >
+
+  <span>：</span>
+
+  <input
+   id="s${m}"
+   type="number"
+   min="0"
+   value="${c.shop}"
+  >
+
+  </div>
+
+  </div>
+
+  <div class="muted">
+  左＝女の子　右＝お店
+  </div>
+
+  </div>
+
+  `;
+
+ }).join("");
+
+
+ document.getElementById("settingsModal")
+ .classList.add("show");
 }
 
 
-function closeSettings(){
+function saveSettings(){
 
-  document.getElementById("settingsModal").style.display="none";
+ const girls=[
+  ...document.querySelectorAll(".girlName")
+ ].map(x=>x.value.trim()).filter(Boolean);
 
-}
+ if(!girls.length){
+  alert("女の子を1人以上設定してください");
+  return;
+ }
 
+ const names=new Set();
 
-/* 女の子一覧 */
+ for(const n of girls){
 
-function renderGirlSettings(){
+  if(names.has(n)){
+   alert("同じ名前があります");
+   return;
+  }
 
-  const box=document.getElementById("girlSettings");
+  names.add(n);
+ }
 
-  box.innerHTML="";
+ const courses={};
 
-  settings.girls.forEach((g,i)=>{
+ for(const m of courseMinutes){
 
-    const row=document.createElement("div");
+  const price=Number(
+   document.getElementById("p"+m).value||0
+  );
 
-    row.className="setting-row";
+  const girl=Number(
+   document.getElementById("g"+m).value||0
+  );
 
-    row.innerHTML=`
-      <input class="setting" value="${g}"
-        onchange="changeGirl(${i},this.value)">
-      <button onclick="deleteGirl(${i})">削除</button>
-    `;
+  const shop=Number(
+   document.getElementById("s"+m).value||0
+  );
 
-    box.append(row);
+  if(girl+shop<=0){
 
-  });
+   alert(m+"分の取り分を設定してください");
 
-}
+   return;
+  }
 
+  courses[m]={
+   price:price,
+   girl:girl,
+   shop:shop
+  };
 
-function changeGirl(i,value){
+ }
 
-  const old=settings.girls[i];
+ settings={
+  girls:girls,
+  courses:courses
+ };
 
-  settings.girls[i]=value.trim() || old;
+ localStorage.setItem(
+  "shop_settings",
+  JSON.stringify(settings)
+ );
 
+ closeModal("settingsModal");
+
+ render();
+
+ alert("設定を保存しました");
 }
 
 
 function addGirl(){
 
-  const name=
-    prompt("女の子の名前を入力してください");
+ const x=document.getElementById("newGirl");
 
-  if(!name) return;
+ const n=x.value.trim();
 
-  settings.girls.push(name);
+ if(!n)return;
 
-  renderGirlSettings();
+ if(settings.girls.includes(n)){
 
+  alert("同じ名前があります");
+
+  return;
+ }
+
+ settings.girls.push(n);
+
+ x.value="";
+
+ openSettings();
 }
 
 
-function deleteGirl(i){
+function removeGirl(i){
 
-  if(settings.girls.length<=1){
+ if(settings.girls.length<=1){
 
-    alert("女の子は1人以上必要です");
+  alert("女の子は1人以上必要です");
 
-    return;
+  return;
+ }
 
-  }
+ settings.girls.splice(i,1);
 
-  if(!confirm(
-    settings.girls[i]+"さんを削除しますか？"
-  )) return;
-
-  settings.girls.splice(i,1);
-
-  renderGirlSettings();
-
+ openSettings();
 }
 
 
-/* 設定保存 */
+/* 日付 */
 
-function saveSettings(){
+function localDate(){
 
-  settings.price40=
-    Number(document.getElementById("price40").value)||0;
+ const d=new Date();
 
-  settings.price60=
-    Number(document.getElementById("price60").value)||0;
+ const z=n=>String(n).padStart(2,"0");
 
-  settings.price90=
-    Number(document.getElementById("price90").value)||0;
+ return d.getFullYear()
+ +"-"+z(d.getMonth()+1)
+ +"-"+z(d.getDate());
+}
 
-  settings.price100=
-    Number(document.getElementById("price100").value)||0;
+function today(){
 
-  settings.price120=
-    Number(document.getElementById("price120").value)||0;
+ document.getElementById("date").value=localDate();
 
-  settings.girlRate=
-    Number(document.getElementById("girlRate").value)||0;
-
-  if(settings.girlRate>100)
-    settings.girlRate=100;
-
-  storeSettings();
-
-  closeSettings();
-
-  render();
-
-  alert("設定を保存しました");
-
+ render();
 }
 
 
-/* 合計 */
+/* 予約データ */
 
-function renderSummary(){
+function key(){
 
-  const box=document.getElementById("summary");
+ return "shop_reservations_"
+ +document.getElementById("date").value;
+}
 
-  let counts={
-    40:0,
-    60:0,
-    90:0,
-    100:0,
-    120:0
-  };
+function getReservations(){
 
-  let total=0;
-  let girl=0;
-  let shop=0;
+ try{
 
-  let girlTotals={};
+  return JSON.parse(
+   localStorage.getItem(key())||"[]"
+  );
 
-  settings.girls.forEach(g=>{
-    girlTotals[g]=0;
-  });
+ }catch(e){
 
+  return [];
 
-  bookings().forEach(b=>{
+ }
+}
 
-    const price=getPrice(b.min);
+function setReservations(a){
 
-    const girlMoney=
-      Math.round(
-        price*settings.girlRate/100
-      );
-
-    const shopMoney=
-      price-girlMoney;
-
-    counts[b.min]++;
-
-    total+=price;
-    girl+=girlMoney;
-    shop+=shopMoney;
-
-    if(girlTotals[b.g]!==undefined){
-
-      girlTotals[b.g]+=girlMoney;
-
-    }
-
-  });
+ localStorage.setItem(
+  key(),
+  JSON.stringify(a)
+ );
+}
 
 
-  let html=`
-    <h2>📊 本日の集計</h2>
+/* 予約画面 */
 
-    <div>40分：${counts[40]}件</div>
-    <div>60分：${counts[60]}件</div>
-    <div>90分：${counts[90]}件</div>
-    <div>100分：${counts[100]}件</div>
-    <div>120分：${counts[120]}件</div>
+function openReserve(time,girl,id=null){
 
-    <hr>
+ selectedId=id;
 
-    <div>売上合計：¥${total.toLocaleString()}</div>
+ document.getElementById("reserveTitle").textContent=
+ id?"予約編集":"予約";
 
-    <div>
-      女の子合計：
-      ¥${girl.toLocaleString()}
-      （${settings.girlRate}%）
-    </div>
 
-    <div>
-      お店合計：
-      ¥${shop.toLocaleString()}
-      （${100-settings.girlRate}%）
-    </div>
+ document.getElementById("rTime").value=time;
 
-    <hr>
 
-    <h3>女の子別</h3>
+ document.getElementById("rGirl").innerHTML=
+ settings.girls.map(g=>
+ `<option>${esc(g)}</option>`
+ ).join("");
+
+
+ document.getElementById("rCourse").innerHTML=
+ courseMinutes.map(m=>
+ `<option value="${m}">${m}分</option>`
+ ).join("");
+
+
+ const old=getReservations()
+ .find(x=>x.id===id);
+
+
+ if(old){
+
+  document.getElementById("rTime").value=old.time;
+
+  document.getElementById("rGirl").value=old.girl;
+
+  document.getElementById("rCourse").value=old.course;
+
+  document.getElementById("rName").value=
+   old.name||"";
+
+ }else{
+
+  document.getElementById("rName").value="";
+
+ }
+
+
+ document.getElementById("deleteBtn").style.display=
+ id?"block":"none";
+
+
+ updateRInfo();
+
+
+ document.getElementById("reserveModal")
+ .classList.add("show");
+}
+
+
+function updateRInfo(){
+
+ const c=
+ settings.courses[
+  Number(document.getElementById("rCourse").value)
+ ];
+
+ const total=c.girl+c.shop;
+
+ const girlMoney=
+ total
+ ?Math.round(c.price*c.girl/total)
+ :0;
+
+ const shopMoney=
+ c.price-girlMoney;
+
+
+ document.getElementById("rInfo").textContent=
+ "料金 "+c.price.toLocaleString()+"円"
+ +" / 女の子 "
+ +girlMoney.toLocaleString()+"円"
+ +" / お店 "
+ +shopMoney.toLocaleString()+"円"
+ +"（"+c.girl+":"+c.shop+"）";
+}
+
+
+document.getElementById("rCourse")
+.addEventListener("change",updateRInfo);
+
+
+function saveReservation(){
+
+ const a=getReservations();
+
+ const r={
+
+  id:selectedId||Date.now().toString(),
+
+  time:document.getElementById("rTime").value,
+
+  girl:document.getElementById("rGirl").value,
+
+  course:Number(
+   document.getElementById("rCourse").value
+  ),
+
+  name:document.getElementById("rName").value.trim()
+
+ };
+
+
+ if(!r.time){
+
+  alert("時間を入力してください");
+
+  return;
+ }
+
+
+ const idx=a.findIndex(
+  x=>x.id===r.id
+ );
+
+
+ if(idx>=0){
+
+  a[idx]=r;
+
+ }else{
+
+  a.push(r);
+
+ }
+
+
+ a.sort(
+  (x,y)=>x.time.localeCompare(y.time)
+ );
+
+
+ setReservations(a);
+
+ closeModal("reserveModal");
+
+ render();
+}
+
+
+function deleteReservation(){
+
+ if(!selectedId)return;
+
+ if(!confirm("この予約を削除しますか？"))
+ return;
+
+ setReservations(
+  getReservations()
+  .filter(x=>x.id!==selectedId)
+ );
+
+ closeModal("reserveModal");
+
+ render();
+}
+
+
+/* 予約表 */
+
+function render(){
+
+ const d=document.getElementById("date");
+
+ if(!d.value)
+ d.value=localDate();
+
+
+ const reservations=getReservations();
+
+ const start=10;
+
+ const end=24;
+
+ const step=10;
+
+
+ let h=`
+
+ <div
+ class="schedule"
+ style="--girls:${settings.girls.length}"
+ >
+
+ <div class="cell head">時間</div>
+ `;
+
+
+ settings.girls.forEach(g=>{
+
+  h+=`
+
+  <div class="cell head">
+  ${esc(g)}
+  </div>
+
+  `;
+
+ });
+
+
+ for(
+  let min=start*60;
+  min<=end*60;
+  min+=step
+ ){
+
+  const time=
+   String(Math.floor(min/60)).padStart(2,"0")
+   +":"
+   +String(min%60).padStart(2,"0");
+
+
+  h+=`
+
+  <div class="cell time">
+  ${time}
+  </div>
+
   `;
 
 
   settings.girls.forEach(g=>{
 
-    html+=`
-      <div>
-        ${g}：¥${girlTotals[g].toLocaleString()}
-      </div>
+   const r=reservations.find(
+    x=>x.time===time&&x.girl===g
+   );
+
+
+   if(r){
+
+    h+=`
+
+    <div class="cell">
+
+    <button
+    class="slot reserved"
+    onclick="openReserve(
+     '${r.time}',
+     '${esc(g)}',
+     '${r.id}'
+    )"
+    >
+
+    <b>${r.course}分</b>
+
+    <small>
+    ${esc(r.name||"予約")}
+    </small>
+
+    </button>
+
+    </div>
+
     `;
+
+   }else{
+
+    h+=`
+
+    <div class="cell">
+
+    <button
+    class="slot"
+    onclick="openReserve(
+     '${time}',
+     '${esc(g)}'
+    )"
+    >
+
+    ＋予約
+
+    </button>
+
+    </div>
+
+    `;
+
+   }
 
   });
 
+ }
 
-  box.innerHTML=html;
 
+ h+="</div>";
+
+ document.getElementById("schedule")
+ .innerHTML=h;
 }
 
 
-/* 今日 */
+/* 集計 */
 
-function today(){
+function openSummary(){
 
-  dateEl.value=
-    new Date().toISOString().slice(0,10);
+ const a=getReservations();
 
-  render();
+ let total=0;
 
+ let girls=0;
+
+ let shop=0;
+
+ let byCourse={};
+
+ let byGirl={};
+
+
+ a.forEach(r=>{
+
+  const c=settings.courses[r.course];
+
+  const p=c.price;
+
+  const sum=c.girl+c.shop;
+
+  const gm=sum
+   ?Math.round(p*c.girl/sum)
+   :0;
+
+  const sm=p-gm;
+
+
+  total+=p;
+
+  girls+=gm;
+
+  shop+=sm;
+
+
+  if(!byCourse[r.course]){
+
+   byCourse[r.course]={
+    count:0,
+    sales:0,
+    girl:0,
+    shop:0
+   };
+
+  }
+
+
+  byCourse[r.course].count++;
+
+  byCourse[r.course].sales+=p;
+
+  byCourse[r.course].girl+=gm;
+
+  byCourse[r.course].shop+=sm;
+
+
+  byGirl[r.girl]=
+   (byGirl[r.girl]||0)+gm;
+
+ });
+
+
+ let h=`
+
+ <p>
+
+ 予約 ${a.length}件
+
+ <br>
+
+ 売上
+ <b>${total.toLocaleString()}円</b>
+
+ <br>
+
+ 女の子合計
+ ${girls.toLocaleString()}円
+
+ <br>
+
+ お店合計
+ ${shop.toLocaleString()}円
+
+ </p>
+
+
+ <h3>コース別</h3>
+
+ <table>
+
+ <tr>
+ <th>コース</th>
+ <th>件数</th>
+ <th>売上</th>
+ <th>女の子</th>
+ <th>お店</th>
+ <th>割合</th>
+ </tr>
+ `;
+
+
+ courseMinutes.forEach(m=>{
+
+  const x=byCourse[m]||{
+   count:0,
+   sales:0,
+   girl:0,
+   shop:0
+  };
+
+  const c=settings.courses[m];
+
+
+  h+=`
+
+  <tr>
+
+  <td>${m}分</td>
+
+  <td>${x.count}</td>
+
+  <td>${x.sales.toLocaleString()}円</td>
+
+  <td>${x.girl.toLocaleString()}円</td>
+
+  <td>${x.shop.toLocaleString()}円</td>
+
+  <td>${c.girl}:${c.shop}</td>
+
+  </tr>
+
+  `;
+
+ });
+
+
+ h+=`
+
+ </table>
+
+ <h3>女の子別</h3>
+
+ <table>
+
+ <tr>
+ <th>名前</th>
+ <th>取り分</th>
+ </tr>
+ `;
+
+
+ settings.girls.forEach(g=>{
+
+  h+=`
+
+  <tr>
+
+  <td>${esc(g)}</td>
+
+  <td>
+  ${(byGirl[g]||0).toLocaleString()}円
+  </td>
+
+  </tr>
+
+  `;
+
+ });
+
+
+ h+="</table>";
+
+
+ document.getElementById("summary")
+ .innerHTML=h;
+
+
+ document.getElementById("summaryModal")
+ .classList.add("show");
 }
+
+
+/* 共通 */
+
+function closeModal(id){
+
+ document.getElementById(id)
+ .classList.remove("show");
+}
+
+
+function esc(s){
+
+ return String(s??"")
+ .replace(
+  /[&<>"']/g,
+  m=>({
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[m])
+ );
+}
+
+
+document.getElementById("date")
+.addEventListener("change",render);
+
+
+document.getElementById("date").value=
+localDate();
 
 
 render();
